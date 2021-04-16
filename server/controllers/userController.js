@@ -30,12 +30,17 @@ class UserController {
 
   static login (req, res, next) {
     const { email, password } = req.body
-    
+
+    if (!email) {
+      next({code: 400, message: 'Email is required'})
+  } else if (!password) {
+      next({code: 400, message: 'Password is required'})
+  } else {
     User.findOne({ where: { email }})
       .then(user => {
         if (user) {
           const comparedPassword = comparePassword(password, user.password)
-
+  
           if(comparedPassword) {
             const access_token = generateToken({ id: user.id, email: user.email })
             res.status(200).json({ access_token })
@@ -55,6 +60,8 @@ class UserController {
       .catch(err => {
         next(err)
       })
+    }
+
   }
 }
 

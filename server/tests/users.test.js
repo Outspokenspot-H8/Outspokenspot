@@ -1,7 +1,20 @@
 const request = require('supertest');
 const app = require('../app');
+const { User } = require('../models')
 
 describe('Testing user routes', () => {
+  afterAll((done) => {
+    User.destroy({ where: {
+      username: 'admin2'
+    } })
+      .then(() => {
+        done()
+      })
+      .catch(err => {
+        done(err)
+      })
+  })
+
   describe('POST /login success', () => {
     it('should return response with status code 200', (done) => {
       // setup
@@ -21,9 +34,6 @@ describe('Testing user routes', () => {
             expect(res.statusCode).toEqual(200);
             expect(typeof res.body).toEqual('object');
             expect(res.body).toHaveProperty('access_token');
-            expect(res.body).toHaveProperty('email', body.email);
-            expect(res.body).toHaveProperty('name');
-            expect(res.body).toHaveProperty('role');
 
             done();
           }
@@ -50,7 +60,7 @@ describe('Testing user routes', () => {
             // assert
             expect(res.statusCode).toEqual(400);
             expect(typeof res.body).toEqual('object');
-            expect(res.body).toHaveProperty('message', 'Email/password is invalid');
+            expect(res.body).toHaveProperty('message', 'Invalid email or password');
 
             done();
           }
@@ -75,7 +85,7 @@ describe('Testing user routes', () => {
             // assert
             expect(res.statusCode).toEqual(400);
             expect(typeof res.body).toEqual('object');
-            expect(res.body).toHaveProperty('message', 'Email/password is invalid');
+            expect(res.body).toHaveProperty('message', 'Invalid email or password');
 
             done();
           }
@@ -129,12 +139,9 @@ describe('Testing user routes', () => {
             // assert
             expect(res.statusCode).toEqual(201);
             expect(typeof res.body).toEqual('object');
-            expect(res.body).toHaveProperty('username');
-            expect(res.body).toHaveProperty('email');
-            expect(res.body).toHaveProperty('location');
-            expect(res.body).toHaveProperty('username', body.username);
-            expect(res.body).toHaveProperty('email', body.email);
-            expect(res.body).toHaveProperty('location', body.location);
+            expect(res.body).toHaveProperty('message');
+            expect(res.body.message).toEqual('user created');
+            expect(res.body).toHaveProperty('user');
 
             done();
           }
@@ -167,7 +174,7 @@ describe('Testing user routes', () => {
             expect(res.body).toHaveProperty('errors');
             expect(Array.isArray(res.body.errors)).toEqual(true);
             expect(res.body.errors).toEqual(
-              expect.arrayContaining(['Username is required'])
+              expect.arrayContaining(['username is required'])
             )
 
             done();
@@ -198,7 +205,7 @@ describe('Testing user routes', () => {
             expect(res.body).toHaveProperty('errors');
             expect(Array.isArray(res.body.errors)).toEqual(true);
             expect(res.body.errors).toEqual(
-              expect.arrayContaining(['Email is required'])
+              expect.arrayContaining(['email is required'])
             )
 
             done();
@@ -229,7 +236,7 @@ describe('Testing user routes', () => {
             expect(res.body).toHaveProperty('errors');
             expect(Array.isArray(res.body.errors)).toEqual(true);
             expect(res.body.errors).toEqual(
-              expect.arrayContaining(['Email is required'])
+              expect.arrayContaining(['password is required'])
             )
 
             done();
@@ -260,7 +267,7 @@ describe('Testing user routes', () => {
             expect(res.body).toHaveProperty('errors');
             expect(Array.isArray(res.body.errors)).toEqual(true);
             expect(res.body.errors).toEqual(
-              expect.arrayContaining(['Location is required'])
+              expect.arrayContaining(['location is required'])
             )
 
             done();
@@ -291,7 +298,7 @@ describe('Testing user routes', () => {
             expect(res.body).toHaveProperty('errors');
             expect(Array.isArray(res.body.errors)).toEqual(true);
             expect(res.body.errors).toEqual(
-              expect.arrayContaining(['Email must be in email format'])
+              expect.arrayContaining(['invalid email format'])
             )
 
             done();

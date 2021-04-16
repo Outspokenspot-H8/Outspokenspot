@@ -5,7 +5,7 @@ let access_token;
 
 describe('Testing questions routes', () => {
   beforeAll(() => {
-    access_token = jwt.sign({id: 1, username: 'admin', email: 'admin@mail.com', location: 'Jakarta' }, process.env.JWT_SECRET);
+    access_token = jwt.sign({ id: 1, username: 'admin', email: 'admin@mail.com', location: 'Jakarta' }, process.env.JWT_SECRET);
   })
 
   describe('GET /questions success', () => {
@@ -38,7 +38,7 @@ describe('Testing questions routes', () => {
           expect(res.statusCode).toEqual(403);
           expect(typeof res.body).toEqual('object');
           expect(res.body).toHaveProperty('message');
-          expect(res.body.message).toEqual('Authentication error, please login first');
+          expect(res.body.message).toEqual('Authentication error, please login');
 
           done()
         }

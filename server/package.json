@@ -4,7 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "db:create:test": "npx sequelize db:create --env test",
+    "db:migrate:test": "sequelize db:migrate --env test",
+    "db:seed:all:test": "sequelize db:seed:all --env test",
+    "db:create:development": "sequelize db:create --env development",
+    "db:migrate:development": "sequelize db:migrate --env development",
+    "db:seed:all:development": "sequelize db:seed:all --env development",
+    "test": "NODE_ENV=test npx jest --detectOpenHandles --forceExit --runInBand",
+    "dev": "NODE_ENV=development nodemon server.js"
   },
   "keywords": [],
   "author": "",

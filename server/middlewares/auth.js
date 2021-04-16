@@ -3,9 +3,9 @@ const { User } = require('../models')
 
 const authenticate = (req, res, next) => {
   try {
-    let {id, email} = verifyToken(req.headers.access_token)
+    let { id } = verifyToken(req.headers.access_token)
     User.findOne({
-      where: { id, email }
+      where: { id }
     })
       .then(user => {
         if (!user) {
