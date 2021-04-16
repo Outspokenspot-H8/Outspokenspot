@@ -7,7 +7,9 @@ class GameController {
       .then(questions => {
         res.status(200).json(questions)
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        next(err)
+      })
   }
 }
 

@@ -15,6 +15,27 @@ describe('Testing user routes', () => {
       })
   })
 
+  describe('GET / success', () => {
+    it('Access "/" should return response with status code 200', (done) => {
+      request(app)
+        .get('/')
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          } else {
+            // assert
+            expect(res.statusCode).toEqual(200);
+            expect(typeof res.body).toEqual('object');
+            expect(res.body).toHaveProperty('message');
+
+            done();
+          }
+        })
+
+    })
+  })
+
+
   describe('POST /login success', () => {
     it('should return response with status code 200', (done) => {
       // setup
@@ -93,11 +114,11 @@ describe('Testing user routes', () => {
 
     })
 
-    it('Empty email & password, should return response with status code 400', (done) => {
+    it('Empty email, should return response with status code 400', (done) => {
       // setup
       const body = {
         email: '',
-        password: ''
+        password: '123456'
       }
       // execute
       request(app)
@@ -111,6 +132,55 @@ describe('Testing user routes', () => {
             expect(res.statusCode).toEqual(400);
             expect(typeof res.body).toEqual('object');
             expect(res.body).toHaveProperty('message', 'Email is required');
+
+            done();
+          }
+        })
+
+    })
+
+    it('Empty password, should return response with status code 400', (done) => {
+      // setup
+      const body = {
+        email: 'admin@mail.com',
+        password: ''
+      }
+      // execute
+      request(app)
+        .post('/login')
+        .send(body)
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          } else {
+            // assert
+            expect(res.statusCode).toEqual(400);
+            expect(typeof res.body).toEqual('object');
+            expect(res.body).toHaveProperty('message', 'Password is required');
+
+            done();
+          }
+        })
+    })
+
+    it('Not sending email body, should return response with status code 400', (done) => {
+      // setup
+      const body = {
+        email: {email: 'email'},
+        password: '123456'
+      }
+      // execute
+      request(app)
+        .post('/login')
+        .send(body)
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          } else {
+            // assert
+            expect(res.statusCode).toEqual(500);
+            expect(typeof res.body).toEqual('object');
+            expect(res.body).toHaveProperty('message');
 
             done();
           }
@@ -300,6 +370,32 @@ describe('Testing user routes', () => {
             expect(res.body.errors).toEqual(
               expect.arrayContaining(['invalid email format'])
             )
+
+            done();
+          }
+        })
+
+    })
+
+    it('Body is not complete, should return response with status code 400', (done) => {
+      // setup
+      const body = {
+        email: 'admin2@mail.com',
+        password: '123456',
+        location: 'Jakarta',
+      }
+      // execute
+      request(app)
+        .post('/register')
+        .send(body)
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          } else {
+            // assert
+            expect(res.statusCode).toEqual(500);
+            expect(typeof res.body).toEqual('object');
+            expect(res.body).toHaveProperty('message');
 
             done();
           }

@@ -20,7 +20,7 @@ const authenticate = (req, res, next) => {
       ))
   } catch (error) {
     console.log(error);
-    next({code: 403, message: 'Authentication error, please login'})
+    next({code: 401, message: 'Authentication error, please login'})
   }
 }
 
