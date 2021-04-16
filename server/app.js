@@ -9,8 +9,4 @@ app.use(express.urlencoded({ extended: false }))
 app.use(router)
 app.use(errorHandler)
 
-app.get('/', (req, res, next) => {
-  res.send('test')
-})
-
 app.listen(PORT, () => console.log(`This app is running on http://localhost:${PORT}`))

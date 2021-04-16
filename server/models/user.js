@@ -42,11 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           args: true,
-          msg: 'Password is required'
+          msg: 'password is required'
         },
         len: {
           args: [6],
-          msg: 'Password lenght minimal 6 characters'
+          msg: 'password lenght minimal 6 characters'
         }
       }
     },

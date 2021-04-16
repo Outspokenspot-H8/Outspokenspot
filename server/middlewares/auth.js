@@ -8,12 +8,19 @@ const authenticate = (req, res, next) => {
       where: { id, email }
     })
       .then(user => {
-        req.loggedUser = { id: user.id, email: user.email }
-        next()
+        if (!user) {
+          next({code: 404, message: 'User not found'});
+        } else {
+          req.loggedUser = { id: user.id, username: user.username, email: user.email, location: user.location }
+          next()
+        }
       })
-      .catch(err => next({name:'401'}))
+      .catch(err => next(
+        next(err)
+      ))
   } catch (error) {
-    next(error)
+    console.log(error);
+    next({code: 403, message: 'Authentication error, please login'})
   }
 }
 
