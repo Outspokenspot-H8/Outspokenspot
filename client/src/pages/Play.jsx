@@ -54,17 +54,15 @@ export default function Play() {
         socketRef.current.emit('join-play', name)
         socketRef.current.on('other-users', (otherUsers) => {
           const peers = []
-          otherUsers?.forEach(otherUserID => {
-            console.log(otherUserID, );
-            console.log(socketRef.current.id, 'SsocketREf');
-            const peer = createPeer(otherUserID, socketRef.current.id, stream)
+          otherUsers?.forEach(otherUser => {
+            const peer = createPeer(otherUser.socketId, socketRef.current.id, stream)
 
             peersRef.current.push({
-              peerID: otherUserID,
+              peerID: otherUser.socketId,
               peer,
             })
 
-            peers.push(peer);
+            peers.push({peer, user: otherUser});
           })
           setPeers(peers)
         })
@@ -133,7 +131,7 @@ export default function Play() {
         </div>
               {
                 peers.map((peer, index) => {
-                  return <PlayerCard key={index} peer={peer} user={room?.users[index]}/>;
+                  return <PlayerCard key={index} peer={peer}/>;
                 })
               }
         {/* {
