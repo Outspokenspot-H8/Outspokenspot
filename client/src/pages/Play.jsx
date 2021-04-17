@@ -7,13 +7,16 @@ import Peer from 'simple-peer'
 import styled from 'styled-components'
 
 const StyledVideo = styled.video`
-    height: 20%;
-    width: 20%;
+    height: 140%;
+    width: 100%;
+    align-items: stretch;
+    align-content: stretch;
+    z-index: 1
 `;
 
 const videoConstraints = {
-  height: window.innerHeight / 1,
-  width: window.innerWidth / 1
+  height: window.innerHeight / 2,
+  width: window.innerWidth / 2
 };
 
 // const Video = (props) => {
@@ -73,7 +76,8 @@ export default function Play() {
             peer
           })
 
-          setPeers(users => [...users, peer])
+          // Ini bikin double
+          // setPeers(users => [...users, peer])
         })
 
         socketRef.current.on('receiving-returned-signal', payload => {
@@ -113,28 +117,30 @@ export default function Play() {
 
     return peer;
   }
-  
+  console.log(peers);
   return (
     <main>
       <div class="banner-play">
         <div class="d-flex flex-column m-3 card" style={{width: "21rem", height: "40%"}}>
-          <div class="flex-fill d-flex flex-column align-items-center justify-content-center bg-secondary">
+          <div class="flex-fill d-flex flex-column align-items-center justify-content-center bg-secondary" style={{height: "60%"}}>
             <StyledVideo muted ref={userVideo} autoPlay playsInline />
             {/* <img class="my-3" src={Avatar} alt="Card image cap" style={{height: "100px"}} /> */}
           </div>
-          <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center">
+          <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center pt-3" style={{zIndex: "2"}}>
             <h3>{localStorage.username}</h3>
             <p>Location: {localStorage.location}</p>
           </div>
         </div>
               {
                 peers.map((peer, index) => {
-                  return <PlayerCard key={index} peer={peer} user={room.users[index]}/>;
+                  return <PlayerCard key={index} peer={peer} user={room?.users[index]}/>;
                 })
               }
         {/* {
           room?.users?.map((user, i) => {
-            return <PlayerCard user={user} key={i} peer={peers[i]} />
+            if (user.username != localStorage.username) {
+              return <PlayerCard user={user} key={i} peer={peers[i]} />
+            }
           })
         } */}
 

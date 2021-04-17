@@ -68,6 +68,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sending-signal', (payload) => {
+    console.log(payload.id);
     io.to(payload.userToSignal).emit('user-joined', { signal: payload.signal, callerID: payload.callerID });
   })
 

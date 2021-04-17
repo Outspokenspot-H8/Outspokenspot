@@ -2,8 +2,11 @@ import React, {useRef, useEffect} from 'react'
 import styled from 'styled-components'
 
 const StyledVideo = styled.video`
-    height: 40%;
-    width: 40%;
+  height: 140%;
+  width: 100%;
+  align-items: stretch;
+  align-content: stretch;
+  z-index: 1
 `;
 
 export default function Video(props) {
