@@ -10,7 +10,6 @@ class UserController {
       password: req.body.password,
       location: req.body.location
     }
-
     User.create(newUser)
       .then(user => {
         res.status(201).json({
