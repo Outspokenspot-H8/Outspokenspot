@@ -113,16 +113,18 @@ export default function Play() {
 
     return peer;
   }
-
+  
   return (
     <main>
       <div class="banner-play">
         <StyledVideo muted ref={userVideo} autoPlay playsInline />
-              {peers.map((peer, index) => {
-                  return (
+              {
+                peers.map((peer, index) => {
+                return (
                       <Video key={index} peer={peer} />
                   );
-              })}
+                })
+              }
         {
           room?.users?.map(user => {
             return <PlayerCard />
