@@ -16,19 +16,19 @@ const videoConstraints = {
   width: window.innerWidth / 1
 };
 
-const Video = (props) => {
-  const ref = useRef();
+// const Video = (props) => {
+//   const ref = useRef();
 
-  useEffect(() => {
-      props.peer.on("stream", stream => {
-          ref.current.srcObject = stream;
-      })
-  }, []);
+//   useEffect(() => {
+//       props.peer.on("stream", stream => {
+//           ref.current.srcObject = stream;
+//       })
+//   }, []);
 
-  return (
-      <StyledVideo playsInline autoPlay ref={ref} />
-  );
-}
+//   return (
+//       <StyledVideo playsInline autoPlay ref={ref} />
+//   );
+// }
 
 export default function Play() {
   const [peers, setPeers] = useState([])
@@ -117,19 +117,26 @@ export default function Play() {
   return (
     <main>
       <div class="banner-play">
-        <StyledVideo muted ref={userVideo} autoPlay playsInline />
+        <div class="d-flex flex-column m-3 card" style={{width: "21rem", height: "40%"}}>
+          <div class="flex-fill d-flex flex-column align-items-center justify-content-center bg-secondary">
+            <StyledVideo muted ref={userVideo} autoPlay playsInline />
+            {/* <img class="my-3" src={Avatar} alt="Card image cap" style={{height: "100px"}} /> */}
+          </div>
+          <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center">
+            <h3>{localStorage.username}</h3>
+            <p>Location: {localStorage.location}</p>
+          </div>
+        </div>
               {
                 peers.map((peer, index) => {
-                return (
-                      <Video key={index} peer={peer} />
-                  );
+                  return <PlayerCard key={index} peer={peer} user={room.users[index]}/>;
                 })
               }
-        {
-          room?.users?.map(user => {
-            return <PlayerCard />
+        {/* {
+          room?.users?.map((user, i) => {
+            return <PlayerCard user={user} key={i} peer={peers[i]} />
           })
-        }
+        } */}
 
         <div id="div-card">
           <div class="d-flex text-center justify-content-center align-items-center">
