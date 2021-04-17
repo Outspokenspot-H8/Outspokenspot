@@ -40,7 +40,7 @@ export default function Register() {
   return (
     <div class="container">
         <div class="row px-3">
-          <div class="card col-lg-10 flex-row mx-auto px-0">
+          <div class="card col-lg-10 flex-row mx-auto px-0" style={{marginTop: "100px", marginBottom: "80px"}}>
             <div class="img-left d-none d-md-flex"></div>
             <div class="card-body">
               <h4 class="title text-center mt-4">

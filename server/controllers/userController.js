@@ -32,36 +32,36 @@ class UserController {
 
     if (!email) {
       next({code: 400, message: 'Email is required'})
-  } else if (!password) {
+    } else if (!password) {
       next({code: 400, message: 'Password is required'})
-  } else {
-    User.findOne({ where: { email }})
-      .then(user => {
-        if (user) {
-          const comparedPassword = comparePassword(password, user.password)
-  
-          if(comparedPassword) {
-            const access_token = generateToken({ id: user.id, email: user.email })
-            res.status(200).json({ access_token })
+    } else {
+      User.findOne({ where: { email }})
+        .then(user => {
+          if (user) {
+            const comparedPassword = comparePassword(password, user.password)
+    
+            if(comparedPassword) {
+              const access_token = generateToken({ id: user.id, email: user.email })
+              res.status(200).json({ id: user.id, access_token, username: user.username, location: user.location })
+            } else {
+              next({
+                code: 400,
+                message: 'Invalid email or password'
+              })
+            }
           } else {
             next({
               code: 400,
               message: 'Invalid email or password'
             })
           }
-        } else {
-          next({
-            code: 400,
-            message: 'Invalid email or password'
-          })
-        }
-      })
-      .catch(err => {
-        next(err)
-      })
-    }
+        })
+        .catch(err => {
+          next(err)
+        })
+      }
 
-  }
+    }
 }
 
 module.exports = UserController
