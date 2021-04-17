@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Avatar from '../assets/avatar.png'
 import Loading from '../assets/loading.gif'
 import RoomCard from '../components/RoomCard'
@@ -17,9 +17,9 @@ export default function Room() {
       setRoom(roomDetail)
     })
     setUser(localStorage.username)
+
     socket.emit('fetch-room-detail', name)
     socket.on('fetched-room-detail', (roomDetail) => {
-      console.log(roomDetail);
       setRoom(roomDetail)
     })
     setUser(localStorage.username)
@@ -39,11 +39,8 @@ export default function Room() {
       <main>
         <div class="banner">
           <div class="d-flex flex-row all-content">
-            {
-              JSON.stringify(room)
-            }
             <div class="box-admin">
-              <h1 class="banner-title">Nama Room</h1>
+              <h1 class="banner-title">Room Name: {room.name}</h1>
               
               <div class="d-flex flex-row m-3 card" style={{width: "20rem"}}>
                 <div class="flex-fill d-flex flex-column align-items-center justify-content-center">

@@ -12,7 +12,8 @@ export default function LobbyCard({room}) {
       user: {
         id: +localStorage.id,
         username: localStorage.username,
-        location: localStorage.location
+        location: localStorage.location,
+        socketId: socket.id
       }
     }
     socket.emit('join-room', payload)
