@@ -5,6 +5,7 @@ import { socket } from '../connections/socketio'
 import PlayerCard from '../components/PlayerCard'
 import Peer from 'simple-peer'
 import styled from 'styled-components'
+import axios from 'axios'
 
 const StyledVideo = styled.video`
     height: 140%;
@@ -40,7 +41,9 @@ export default function Play() {
   const userVideo = useRef()
   const peersRef = useRef([])
   const { name } = useParams()
-
+  const [questions,setQuestions] = useState([])
+  const [question,setQuestion] = useState({})
+  const [players,setPlayer] = useState([])
 
   useEffect(() => {
     socket.emit('get-room-detail', name)
@@ -84,6 +87,9 @@ export default function Play() {
         })
       })
 
+      
+      getCard()
+
   }, [])
 
   const createPeer = (userToSignal, callerID, stream) => {
@@ -115,7 +121,42 @@ export default function Play() {
 
     return peer;
   }
-  console.log(peers);
+  if(room){
+    console.log(room,'<<<<<<<<<<<<<<<')
+    setPlayer(room.admin)
+  }
+  console.log(peers,'<<<<<<');
+
+
+  const getCard=()=>{
+    axios({
+      method:'get',
+      url:'http://localhost:4000/questions',
+      headers:{
+        access_token: localStorage.getItem('access_token')
+      }
+    })
+    .then(({data})=>{
+      setQuestions(data)
+      let random = questions[Math.round(Math.random()* questions.length-1)]
+      setQuestion(random)
+
+      // let index = questions.indexOf(random)
+      // let newQuestion = questions.splice(index,1)
+      // console.log(newQuestion,'<<<<<')
+      // setQuestions(newQuestion)
+    })
+    .catch(console.log)
+  }
+
+  const shuffleCard = ()=>{
+    console.log('abc')
+    let random = questions[Math.round(Math.random()* questions.length-1)]
+    setQuestion(random)
+    let index = questions.indexOf(random)
+    questions.splice(index,1)
+  }
+
   return (
     <main>
       <div class="banner-play">
@@ -144,12 +185,13 @@ export default function Play() {
 
         <div id="div-card" style={{zIndex: "5"}}>
           <div class="d-flex text-center justify-content-center align-items-center">
-            <h1 id="question-text">ASDJNDWPIFPIJOASKFV</h1>
+            <h1 id="question-text">{question? question.question : 'Click Shuffle Card To Play'}</h1>
             <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
           </div>
           <h2>Username</h2>
           <div class="d-flex flex-row">
-            <button class="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+            <button class="btn btn-secondary my-1 mx-2"
+            onClick={()=>{shuffleCard()}}>Shuffle Card</button> 
             <button class="btn btn-secondary my-1 mx-2">Turn</button>
           </div>
         </div>

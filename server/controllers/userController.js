@@ -29,7 +29,6 @@ class UserController {
 
   static login (req, res, next) {
     const { email, password } = req.body
-
     if (!email) {
       next({code: 400, message: 'Email is required'})
     } else if (!password) {
@@ -39,9 +38,10 @@ class UserController {
         .then(user => {
           if (user) {
             const comparedPassword = comparePassword(password, user.password)
-    
+            // console.log(comparedPassword)
             if(comparedPassword) {
               const access_token = generateToken({ id: user.id, email: user.email })
+              // console.log(access_token,'<<<')
               res.status(200).json({ id: user.id, access_token, username: user.username, location: user.location })
             } else {
               next({
