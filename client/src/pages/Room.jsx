@@ -11,7 +11,7 @@ export default function Room() {
   const [user, setUser] = useState('')
   const { name } = useParams()
   const history = useHistory()
-  
+
   useEffect(() => {
     socket.on('room-detail', (roomDetail) => {
       setRoom(roomDetail)
@@ -41,7 +41,7 @@ export default function Room() {
           <div class="d-flex flex-row all-content">
             <div class="box-admin">
               <h1 class="banner-title">Room Name: {room.name}</h1>
-              
+
               <div class="d-flex flex-row m-3 card" style={{width: "20rem"}}>
                 <div class="flex-fill d-flex flex-column align-items-center justify-content-center">
                   <img class="my-3" src={Avatar} alt="Card image cap" />
@@ -68,9 +68,9 @@ export default function Room() {
                 </div>
               }
 
-              
+
             </div>
-            
+
             <div class="box-user">
               {
                 room?.users?.map(user => {
@@ -81,7 +81,7 @@ export default function Room() {
             </div>
           </div>
         </div>
-    </main>
+      </main>
     </div>
   )
 }

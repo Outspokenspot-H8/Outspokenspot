@@ -149,7 +149,7 @@ export default function Play() {
           </div>
           <h2>Username</h2>
           <div class="d-flex flex-row">
-            <button class="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+            <button class="btn btn-secondary my-1 mx-2">Shuffle Card</button>
             <button class="btn btn-secondary my-1 mx-2">Turn</button>
           </div>
         </div>
