@@ -4,8 +4,8 @@ import styled from 'styled-components'
 const StyledVideo = styled.video`
   height: 140%;
   width: 100%;
-  align-items: stretch;
-  align-content: stretch;
+  position: absolute;
+  bottom: 0;
   z-index: 1
 `;
 
@@ -21,6 +21,6 @@ export default function Video(props) {
   }, [props]);
 
   return (
-      <StyledVideo playsInline autoPlay ref={ref} />
+      <StyledVideo className="img-fluid" playsInline autoPlay ref={ref} />
   );
 }

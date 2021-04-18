@@ -9,8 +9,8 @@ import styled from 'styled-components'
 const StyledVideo = styled.video`
     height: 140%;
     width: 100%;
-    align-items: stretch;
-    align-content: stretch;
+    position: absolute;
+    bottom: 0;
     z-index: 1
 `;
 
@@ -120,11 +120,11 @@ export default function Play() {
     <main>
       <div class="banner-play">
         <div class="d-flex flex-column m-3 card" style={{width: "21rem", height: "40%"}}>
-          <div class="flex-fill d-flex flex-column align-items-center justify-content-center bg-secondary" style={{height: "60%"}}>
-            <StyledVideo muted ref={userVideo} autoPlay playsInline />
+          <div class="flex-fill align-items-start d-flex justify-content-center bg-secondary" style={{height: "50%"}}>
+            <StyledVideo className="img-fluid" muted ref={userVideo} autoPlay playsInline />
             {/* <img class="my-3" src={Avatar} alt="Card image cap" style={{height: "100px"}} /> */}
           </div>
-          <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center pt-3" style={{zIndex: "2"}}>
+          <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center bg-light" style={{zIndex: "2"}}>
             <h3>{localStorage.username}</h3>
             <p>Location: {localStorage.location}</p>
           </div>
@@ -142,7 +142,7 @@ export default function Play() {
           })
         } */}
 
-        <div id="div-card">
+        <div id="div-card" style={{zIndex: "5"}}>
           <div class="d-flex text-center justify-content-center align-items-center">
             <h1 id="question-text">ASDJNDWPIFPIJOASKFV</h1>
             <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
