@@ -129,11 +129,11 @@ export default function Play() {
             <p>Location: {localStorage.location}</p>
           </div>
         </div>
-              {
-                peers.map((peer, index) => {
-                  return <PlayerCard key={index} peer={peer}/>;
-                })
-              }
+          {
+            peers.map((peer, index) => {
+              return <PlayerCard key={index} peer={peer}/>;
+            })
+          }
         {/* {
           room?.users?.map((user, i) => {
             if (user.username != localStorage.username) {

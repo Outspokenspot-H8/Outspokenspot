@@ -12,18 +12,14 @@ import Play from './pages/Play.jsx'
 import Login from './pages/Login.jsx'
 import Room from './pages/Room.jsx'
 import Navbar from './components/Navbar'
+import LoginRegister from './pages/LoginRegister'
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/login">
-          <Navbar />
-          <Login />
-        </Route>
-        <Route path="/register">
-          <Navbar />
-          <Register />
+        <Route path="/lobby">
+          <Lobby />
         </Route>
         <Route path="/room/:name">
           <Navbar />
@@ -34,7 +30,7 @@ function App() {
           <Play />
         </Route>
         <Route exact path="/">
-          <Lobby />
+          <LoginRegister />
         </Route>
       </Switch>
     </Router>
