@@ -4,7 +4,8 @@ import {
   Switch,
   Route,
   Link,
-  Redirect
+  Redirect,
+  useLocation
 } from "react-router-dom";
 
 import Lobby from './pages/Lobby.jsx'
@@ -34,9 +35,24 @@ function App() {
         <Route exact path="/">
           { localStorage.access_token ? (<Redirect to="/lobby" />)  : ( <LoginRegister/> ) }
         </Route>
+        <Route path="*">
+            <NoMatch />
+        </Route>
       </Switch>
     </Router>
   );
+}
+
+function NoMatch () {
+  let location = useLocation();
+
+  return (
+    <div>
+      <h3>
+        No match for <code>{location.pathname}</code>
+      </h3>
+    </div>
+  )
 }
 
 export default App;
