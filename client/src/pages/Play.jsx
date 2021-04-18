@@ -41,9 +41,9 @@ export default function Play() {
   const userVideo = useRef()
   const peersRef = useRef([])
   const { name } = useParams()
-  const [questions,setQuestions] = useState([])
-  const [question,setQuestion] = useState({})
-  const [players,setPlayer] = useState([])
+  const [questions, setQuestions] = useState([])
+  const [question, setQuestion] = useState({})
+  const [isStart, setIsStart] = useState(false)
 
   useEffect(() => {
     socket.emit('get-room-detail', name)
@@ -87,9 +87,17 @@ export default function Play() {
         })
       })
 
-      
-      getCard()
+      // Broadcast random question
+      socket.on('get-random-question', (payload) => {
+        setQuestions(payload.questions)
+        setQuestion(payload.question)
+      })
 
+      // Start game, bawa questions
+      socket.on('get-random-questions', (questions) => {
+        setQuestions(questions)
+        setIsStart(true)
+      })
   }, [])
 
   const createPeer = (userToSignal, callerID, stream) => {
@@ -121,40 +129,29 @@ export default function Play() {
 
     return peer;
   }
-  if(room){
-    console.log(room,'<<<<<<<<<<<<<<<')
-    setPlayer(room.admin)
-  }
-  console.log(peers,'<<<<<<');
 
-
-  const getCard=()=>{
+  const getCard = () => {
     axios({
-      method:'get',
+      method:'GET',
       url:'http://localhost:4000/questions',
       headers:{
         access_token: localStorage.getItem('access_token')
       }
     })
     .then(({data})=>{
-      setQuestions(data)
-      let random = questions[Math.round(Math.random()* questions.length-1)]
-      setQuestion(random)
-
-      // let index = questions.indexOf(random)
-      // let newQuestion = questions.splice(index,1)
-      // console.log(newQuestion,'<<<<<')
-      // setQuestions(newQuestion)
+      socket.emit('start-game', {name, questions: data})
     })
-    .catch(console.log)
+    .catch(err => {
+      console.log(err);
+    })
   }
 
-  const shuffleCard = ()=>{
-    console.log('abc')
-    let random = questions[Math.round(Math.random()* questions.length-1)]
-    setQuestion(random)
+  const shuffleCard = () =>{
+    let random = questions[Math.floor(Math.random() * questions.length)]
     let index = questions.indexOf(random)
-    questions.splice(index,1)
+    let result = [...questions.slice(0, index), ...questions.slice(index + 1)]
+
+    socket.emit('shuffle-card', {name, question: random, questions: result, index})
   }
 
   return (
@@ -185,14 +182,22 @@ export default function Play() {
 
         <div id="div-card" style={{zIndex: "5"}}>
           <div class="d-flex text-center justify-content-center align-items-center">
-            <h1 id="question-text">{question? question.question : 'Click Shuffle Card To Play'}</h1>
+            <h1 id="question-text">{question ? question.question : 'Click Shuffle Card To Play'}</h1>
             <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
           </div>
           <h2>Username</h2>
           <div class="d-flex flex-row">
-            <button class="btn btn-secondary my-1 mx-2"
-            onClick={()=>{shuffleCard()}}>Shuffle Card</button> 
-            <button class="btn btn-secondary my-1 mx-2">Turn</button>
+            {
+              isStart ?
+              <div>
+                <button class="btn btn-secondary my-1 mx-2"
+                onClick={()=> shuffleCard()}>Shuffle Card</button> 
+                <button class="btn btn-secondary my-1 mx-2">Turn</button>
+              </div>
+              :
+              <button class="btn btn-secondary my-1 mx-2"
+              onClick={()=> getCard()}>Start Game</button> 
+            }
           </div>
         </div>
       </div>
