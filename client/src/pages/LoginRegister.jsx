@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import '../styles/logres.css'
+import '../styles/logress.css'
 import OutspokenspotCard from '../assets/outspokenspot-cards.png'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
@@ -64,7 +64,7 @@ export default function LoginRegister() {
       console.log(err);
     })
   }
-  
+
   const changeDataRegister = (e) => {
     setNewUser({
       ...newUser,
@@ -81,10 +81,6 @@ export default function LoginRegister() {
     setSlide('signup')
   }
 
-
-
-
-
   return (
     <div class="banner">
       <div class="banner-content text-center">
@@ -92,7 +88,7 @@ export default function LoginRegister() {
         <h4>This is not a game, more like an intimate session with your friend, family, or your partner. Be honest, be outspoken.</h4>
       </div>
       <div class="form-structor">
-          
+
           <div class={ slide === 'signup' ? "signup slide-up" : "signup" }>
               <h2 onClick={() => handleSlideSignUp()} class="form-title" id="signup"><span>or</span>Sign up</h2>
               <div class="form-holder">
@@ -111,7 +107,7 @@ export default function LoginRegister() {
                       <input onChange={changeDataLogin} value={dataLogin.email} name="email" type="email" class="input" placeholder="Email" />
                       <input onChange={changeDataLogin} value={dataLogin.password} name="password" type="password" class="input" placeholder="Password" />
                   </div>
-                  <button onClick={() => login()} class="submit-btn">Let's Go</button>
+                  <button onClick={login} class="submit-btn">Let's Go</button>
               </div>
           </div>
 

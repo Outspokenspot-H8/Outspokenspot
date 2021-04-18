@@ -3,7 +3,9 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect,
+  useLocation
 } from "react-router-dom";
 
 import Lobby from './pages/Lobby.jsx'
@@ -18,23 +20,39 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/lobby">
-          <Lobby />
-        </Route>
-        <Route path="/room/:name">
-          <Navbar />
-          <Room />
-        </Route>
-        <Route path="/play/:name">
-          <Navbar />
-          <Play />
-        </Route>
+        <Route
+          path="/lobby"
+          render={() => localStorage.access_token ? <Lobby/> : <Redirect to="/"/> }
+        />
+        <Route
+          path="/room/:name"
+          render={() => localStorage.access_token ? (<> <Navbar/> <Room/> </>) : <Redirect to="/"/> }
+        />
+        <Route
+          path="/play/:name"
+          render={() => localStorage.access_token ? (<> <Navbar/> <Play/> </>) : <Redirect to="/"/> }
+        />
         <Route exact path="/">
-          <LoginRegister />
+          { localStorage.access_token ? (<Redirect to="/lobby" />)  : ( <LoginRegister/> ) }
+        </Route>
+        <Route path="*">
+            <NoMatch />
         </Route>
       </Switch>
     </Router>
   );
+}
+
+function NoMatch () {
+  let location = useLocation();
+
+  return (
+    <div>
+      <h3>
+        No match for <code>{location.pathname}</code>
+      </h3>
+    </div>
+  )
 }
 
 export default App;
