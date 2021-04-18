@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom'
 
 export default function Navbar() {
   const { pathname } = useLocation()
+
   console.log(pathname);
   return (
     <header>
@@ -15,7 +16,7 @@ export default function Navbar() {
         <ul class="pt-3">
           {
             pathname !== '/login' && pathname !== '/register' && pathname !== '/' ?
-            <li><button type="button" class="btn btn-outline-warning mx-2">Exit</button></li>
+            <li><button type="button" class="btn btn-outline-warning mx-2"><a href="/lobby" style={{textDecoration: "none", color: "inherit"}}>Exit</a></button></li>
             :
             <></>
           }

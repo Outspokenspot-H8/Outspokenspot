@@ -62,7 +62,7 @@ export default function Play() {
               peer,
             })
 
-            peers.push({peer, user: otherUser});
+            peers.push({peerID: otherUser.socketId, peer, user: otherUser});
           })
           setPeers(peers)
         })
@@ -74,6 +74,11 @@ export default function Play() {
             peer
           })
 
+          // const peerObj = {
+          //   peer,
+          //   peerID: payload.callerID
+          // }
+
           // Ini bikin double
           // setPeers(users => [...users, peer])
         })
@@ -81,6 +86,16 @@ export default function Play() {
         socketRef.current.on('receiving-returned-signal', payload => {
           const item = peersRef.current.find(p => p.peerID === payload.id);
           item.peer.signal(payload.signal)
+        })
+
+        socketRef.current.on('user-left', (id) => {
+          const peerObj = peersRef.current.find(peer => peer.peerID === id);
+          if (peerObj) {
+            peerObj.peer.destroy()
+          }
+          const peers = peersRef.current.filter(peer => peer.peerID !== id);
+          peersRef.current = peers
+          setPeers(peers)
         })
       })
 
@@ -130,8 +145,8 @@ export default function Play() {
           </div>
         </div>
           {
-            peers.map((peer, index) => {
-              return <PlayerCard key={index} peer={peer}/>;
+            peers.map(peer => {
+              return <PlayerCard key={peer.peerID} peer={peer}/>;
             })
           }
         {/* {
