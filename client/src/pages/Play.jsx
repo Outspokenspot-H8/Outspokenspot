@@ -5,6 +5,7 @@ import { socket } from '../connections/socketio'
 import PlayerCard from '../components/PlayerCard'
 import Peer from 'simple-peer'
 import styled from 'styled-components'
+import axios from 'axios'
 
 const StyledVideo = styled.video`
     height: 140%;
@@ -40,7 +41,9 @@ export default function Play() {
   const userVideo = useRef()
   const peersRef = useRef([])
   const { name } = useParams()
-
+  const [questions, setQuestions] = useState([])
+  const [question, setQuestion] = useState({})
+  const [isStart, setIsStart] = useState(false)
 
   useEffect(() => {
     socket.emit('get-room-detail', name)
@@ -99,6 +102,17 @@ export default function Play() {
         })
       })
 
+      // Broadcast random question
+      socket.on('get-random-question', (payload) => {
+        setQuestions(payload.questions)
+        setQuestion(payload.question)
+      })
+
+      // Start game, bawa questions
+      socket.on('get-random-questions', (questions) => {
+        setQuestions(questions)
+        setIsStart(true)
+      })
   }, [])
 
   const createPeer = (userToSignal, callerID, stream) => {
@@ -130,7 +144,31 @@ export default function Play() {
 
     return peer;
   }
-  console.log(peers);
+
+  const getCard = () => {
+    axios({
+      method:'GET',
+      url:'http://localhost:4000/questions',
+      headers:{
+        access_token: localStorage.getItem('access_token')
+      }
+    })
+    .then(({data})=>{
+      socket.emit('start-game', {name, questions: data})
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
+  const shuffleCard = () =>{
+    let random = questions[Math.floor(Math.random() * questions.length)]
+    let index = questions.indexOf(random)
+    let result = [...questions.slice(0, index), ...questions.slice(index + 1)]
+
+    socket.emit('shuffle-card', {name, question: random, questions: result, index})
+  }
+
   return (
     <main>
       <div class="banner-play">
@@ -159,11 +197,22 @@ export default function Play() {
 
         <div id="div-card" style={{zIndex: "5"}}>
           <div class="d-flex text-center justify-content-center align-items-center">
-            <h1 id="question-text">ASDJNDWPIFPIJOASKFV</h1>
+            <h1 id="question-text">{question ? question.question : 'Click Shuffle Card To Play'}</h1>
             <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
           </div>
           <h2>Username</h2>
           <div class="d-flex flex-row">
+            {
+              isStart ?
+              <div>
+                <button class="btn btn-secondary my-1 mx-2"
+                onClick={()=> shuffleCard()}>Shuffle Card</button> 
+                <button class="btn btn-secondary my-1 mx-2">Turn</button>
+              </div>
+              :
+              <button class="btn btn-secondary my-1 mx-2"
+              onClick={()=> getCard()}>Start Game</button> 
+            }
             <button class="btn btn-secondary my-1 mx-2">Shuffle Card</button>
             <button class="btn btn-secondary my-1 mx-2">Turn</button>
           </div>

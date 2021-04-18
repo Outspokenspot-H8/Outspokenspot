@@ -79,6 +79,14 @@ io.on('connection', (socket) => {
     io.to(payload.callerID).emit('receiving-returned-signal', { signal: payload.signal, id: socket.id });
   })
 
+  socket.on('shuffle-card', (payload) => {
+    io.sockets.in(payload.name).emit('get-random-question', {question: payload.question, questions: payload.questions, index: payload.index})
+  })
+
+  socket.on('start-game', (payload) => {
+    io.sockets.in(payload.name).emit('get-random-questions', payload.questions)
+  })
+  
   socket.on('disconnect', () => {
     let leavedRoom;
     rooms.forEach(room => {
