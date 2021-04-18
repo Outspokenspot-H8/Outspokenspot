@@ -25,11 +25,11 @@ function App() {
         />
         <Route
           path="/room/:name"
-          render={() => localStorage.access_token ? <Room/> : <Redirect to="/"/> }
+          render={() => localStorage.access_token ? (<> <Navbar/> <Room/> </>) : <Redirect to="/"/> }
         />
         <Route
           path="/play/:name"
-          render={() => localStorage.access_token ? <Play/> : <Redirect to="/"/> }
+          render={() => localStorage.access_token ? (<> <Navbar/> <Play/> </>) : <Redirect to="/"/> }
         />
         <Route exact path="/">
           { localStorage.access_token ? (<Redirect to="/lobby" />)  : ( <LoginRegister/> ) }

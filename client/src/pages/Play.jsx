@@ -5,7 +5,6 @@ import { socket } from '../connections/socketio'
 import PlayerCard from '../components/PlayerCard'
 import Peer from 'simple-peer'
 import styled from 'styled-components'
-import Navbar from '../components/Navbar'
 
 const StyledVideo = styled.video`
     height: 140%;
@@ -118,46 +117,43 @@ export default function Play() {
   }
   console.log(peers);
   return (
-    <>
-      <Navbar/>
-      <main>
-        <div class="banner-play">
-          <div class="d-flex flex-column m-3 card" style={{width: "21rem", height: "40%"}}>
-            <div class="flex-fill align-items-start d-flex justify-content-center bg-secondary" style={{height: "50%"}}>
-              <StyledVideo className="img-fluid" muted ref={userVideo} autoPlay playsInline />
-              {/* <img class="my-3" src={Avatar} alt="Card image cap" style={{height: "100px"}} /> */}
-            </div>
-            <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center bg-light" style={{zIndex: "2"}}>
-              <h3>{localStorage.username}</h3>
-              <p>Location: {localStorage.location}</p>
-            </div>
+    <main>
+      <div class="banner-play">
+        <div class="d-flex flex-column m-3 card" style={{width: "21rem", height: "40%"}}>
+          <div class="flex-fill align-items-start d-flex justify-content-center bg-secondary" style={{height: "50%"}}>
+            <StyledVideo className="img-fluid" muted ref={userVideo} autoPlay playsInline />
+            {/* <img class="my-3" src={Avatar} alt="Card image cap" style={{height: "100px"}} /> */}
           </div>
-            {
-              peers.map((peer, index) => {
-                return <PlayerCard key={index} peer={peer}/>;
-              })
-            }
-          {/* {
-            room?.users?.map((user, i) => {
-              if (user.username != localStorage.username) {
-                return <PlayerCard user={user} key={i} peer={peers[i]} />
-              }
-            })
-          } */}
-
-          <div id="div-card" style={{zIndex: "5"}}>
-            <div class="d-flex text-center justify-content-center align-items-center">
-              <h1 id="question-text">ASDJNDWPIFPIJOASKFV</h1>
-              <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
-            </div>
-            <h2>Username</h2>
-            <div class="d-flex flex-row">
-              <button class="btn btn-secondary my-1 mx-2">Shuffle Card</button>
-              <button class="btn btn-secondary my-1 mx-2">Turn</button>
-            </div>
+          <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center bg-light" style={{zIndex: "2"}}>
+            <h3>{localStorage.username}</h3>
+            <p>Location: {localStorage.location}</p>
           </div>
         </div>
-      </main>
-    </>
+          {
+            peers.map((peer, index) => {
+              return <PlayerCard key={index} peer={peer}/>;
+            })
+          }
+        {/* {
+          room?.users?.map((user, i) => {
+            if (user.username != localStorage.username) {
+              return <PlayerCard user={user} key={i} peer={peers[i]} />
+            }
+          })
+        } */}
+
+        <div id="div-card" style={{zIndex: "5"}}>
+          <div class="d-flex text-center justify-content-center align-items-center">
+            <h1 id="question-text">ASDJNDWPIFPIJOASKFV</h1>
+            <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
+          </div>
+          <h2>Username</h2>
+          <div class="d-flex flex-row">
+            <button class="btn btn-secondary my-1 mx-2">Shuffle Card</button>
+            <button class="btn btn-secondary my-1 mx-2">Turn</button>
+          </div>
+        </div>
+      </div>
+    </main>
   )
 }
