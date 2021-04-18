@@ -13,7 +13,6 @@ export default function Lobby() {
   }
 
   const handleCreateRoom = () => {
-    console.log('Nama ruangan', roomName);
     let payload = {
       'room-name': roomName,
       admin: localStorage.username,

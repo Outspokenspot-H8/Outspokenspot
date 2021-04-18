@@ -64,10 +64,14 @@ io.on('connection', (socket) => {
       otherUsersSocketID = otherUsers.map(user => user.socketId)
     }
     
-    socket.emit('other-users', otherUsersSocketID)
+    console.log(otherUsers, 'Other User');
+    console.log(otherUsersSocketID, 'Other User SocketId');
+
+    socket.emit('other-users', otherUsers)
   })
 
   socket.on('sending-signal', (payload) => {
+    console.log(payload.id);
     io.to(payload.userToSignal).emit('user-joined', { signal: payload.signal, callerID: payload.callerID });
   })
 

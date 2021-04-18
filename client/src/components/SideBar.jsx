@@ -3,8 +3,8 @@ import Logo from '../assets/outspokenspot-cards.png'
 
 export default function SideBar() {
   return (
-    <div className="sidebar text-center overflow-auto">
-      <div className="logo mt-4">
+    <div className="sidebar text-center">
+      <div className="logo">
         <img src={Logo} alt="outspoketspot-cards" />
       </div>
       <div className="about-us">
@@ -18,11 +18,16 @@ export default function SideBar() {
                 <li>Make sure you answer the question outspokenly.</li>
                 <li>You could do this over and over and you won't get same question at one go.</li>
             </ol>
-            <nav id="nav">
+            {/* <nav id="nav">
               <button type="button" className="btn btn-outline-warning btn-lg mx-1 mb-5">Create Room</button>
-            </nav>
+            </nav> */}
           </div>
         </div>
+        <nav id="nav">
+          <ul style={{marginRight: "0px"}}>
+            <li><button type="button" class="btn btn-outline-warning btn-lg">Create Room</button></li>
+          </ul>
+        </nav>
     </div>
   )
 }

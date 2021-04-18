@@ -7,28 +7,31 @@ import Peer from 'simple-peer'
 import styled from 'styled-components'
 
 const StyledVideo = styled.video`
-    height: 20%;
-    width: 20%;
+    height: 140%;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    z-index: 1
 `;
 
 const videoConstraints = {
-  height: window.innerHeight / 1,
-  width: window.innerWidth / 1
+  height: window.innerHeight / 2,
+  width: window.innerWidth / 2
 };
 
-const Video = (props) => {
-  const ref = useRef();
+// const Video = (props) => {
+//   const ref = useRef();
 
-  useEffect(() => {
-      props.peer.on("stream", stream => {
-          ref.current.srcObject = stream;
-      })
-  }, []);
+//   useEffect(() => {
+//       props.peer.on("stream", stream => {
+//           ref.current.srcObject = stream;
+//       })
+//   }, []);
 
-  return (
-      <StyledVideo playsInline autoPlay ref={ref} />
-  );
-}
+//   return (
+//       <StyledVideo playsInline autoPlay ref={ref} />
+//   );
+// }
 
 export default function Play() {
   const [peers, setPeers] = useState([])
@@ -51,17 +54,15 @@ export default function Play() {
         socketRef.current.emit('join-play', name)
         socketRef.current.on('other-users', (otherUsers) => {
           const peers = []
-          otherUsers?.forEach(otherUserID => {
-            console.log(otherUserID, );
-            console.log(socketRef.current.id, 'SsocketREf');
-            const peer = createPeer(otherUserID, socketRef.current.id, stream)
+          otherUsers?.forEach(otherUser => {
+            const peer = createPeer(otherUser.socketId, socketRef.current.id, stream)
 
             peersRef.current.push({
-              peerID: otherUserID,
+              peerID: otherUser.socketId,
               peer,
             })
 
-            peers.push(peer);
+            peers.push({peer, user: otherUser});
           })
           setPeers(peers)
         })
@@ -73,7 +74,8 @@ export default function Play() {
             peer
           })
 
-          setPeers(users => [...users, peer])
+          // Ini bikin double
+          // setPeers(users => [...users, peer])
         })
 
         socketRef.current.on('receiving-returned-signal', payload => {
@@ -113,25 +115,34 @@ export default function Play() {
 
     return peer;
   }
-  
+  console.log(peers);
   return (
     <main>
       <div class="banner-play">
-        <StyledVideo muted ref={userVideo} autoPlay playsInline />
-              {
-                peers.map((peer, index) => {
-                return (
-                      <Video key={index} peer={peer} />
-                  );
-                })
-              }
-        {
-          room?.users?.map(user => {
-            return <PlayerCard />
+        <div class="d-flex flex-column m-3 card" style={{width: "21rem", height: "40%"}}>
+          <div class="flex-fill align-items-start d-flex justify-content-center bg-secondary" style={{height: "50%"}}>
+            <StyledVideo className="img-fluid" muted ref={userVideo} autoPlay playsInline />
+            {/* <img class="my-3" src={Avatar} alt="Card image cap" style={{height: "100px"}} /> */}
+          </div>
+          <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center bg-light" style={{zIndex: "2"}}>
+            <h3>{localStorage.username}</h3>
+            <p>Location: {localStorage.location}</p>
+          </div>
+        </div>
+          {
+            peers.map((peer, index) => {
+              return <PlayerCard key={index} peer={peer}/>;
+            })
+          }
+        {/* {
+          room?.users?.map((user, i) => {
+            if (user.username != localStorage.username) {
+              return <PlayerCard user={user} key={i} peer={peers[i]} />
+            }
           })
-        }
+        } */}
 
-        <div id="div-card">
+        <div id="div-card" style={{zIndex: "5"}}>
           <div class="d-flex text-center justify-content-center align-items-center">
             <h1 id="question-text">ASDJNDWPIFPIJOASKFV</h1>
             <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
