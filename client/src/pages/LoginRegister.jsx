@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import '../styles/logress.css'
+import '../styles/logres.css'
 import OutspokenspotCard from '../assets/outspokenspot-cards.png'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
