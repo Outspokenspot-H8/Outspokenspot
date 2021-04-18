@@ -81,10 +81,6 @@ export default function LoginRegister() {
     setSlide('signup')
   }
 
-
-
-
-
   return (
     <div class="banner">
       <div class="banner-content text-center flex-fill">
@@ -111,7 +107,7 @@ export default function LoginRegister() {
                       <input onChange={changeDataLogin} value={dataLogin.email} name="email" type="email" class="input" placeholder="Email" />
                       <input onChange={changeDataLogin} value={dataLogin.password} name="password" type="password" class="input" placeholder="Password" />
                   </div>
-                  <button onClick={() => login()} class="submit-btn">Let's Go</button>
+                  <button onClick={login} class="submit-btn">Let's Go</button>
               </div>
           </div>
 
