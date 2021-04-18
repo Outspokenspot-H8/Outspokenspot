@@ -81,22 +81,6 @@ describe('Testing questions routes', () => {
         }
       })
     })
-
-    it('Authentication error id not found on access_token, should return response with status code 403', (done) => {
-      request(app)
-      .get('/questions')
-      .set('access_token', access_token)
-      .end((err, res) => {
-        if(err) {
-          done(err)
-        } else {
-          expect(res.statusCode).toEqual(404);
-          expect(typeof res.body).toEqual('object');
-
-          done()
-        }
-      })
-    })
   })
   
 })

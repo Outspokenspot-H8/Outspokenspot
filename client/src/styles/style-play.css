@@ -4,8 +4,16 @@ html, body, h1, h2, h3, h4, h5, h6, p, a, button {
     font-family: 'Chakra Petch', sans-serif !important;
 }
 
+body {
+  background-color: #8E44AD!important;
+}
+
 a {
     text-decoration: none !important;
+}
+
+#main-container {
+  background-color: #8E44AD;
 }
 
 header {
@@ -13,7 +21,7 @@ header {
   width: 100%;
   height: 60px;
   background-color: #8E44AD;
-  display: flex;
+  display: flex!important;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0px -39px 60px 21px #353535;
@@ -21,15 +29,14 @@ header {
 }
 
 .sidebar {
-  overflow: auto;
   position: fixed;
   width: 30%;
-  height: 100%;
+  max-height: 100%;
   flex-direction: column;
   background-color: #8E44AD;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   box-shadow: 0px -39px 60px 21px #353535;
   z-index: 10;
 }
@@ -94,7 +101,6 @@ ul {
 #nav ul {
     display: flex;
     margin-right: 60px;
-    align-content: flex-end;
 }
 
 .banner {
@@ -170,8 +176,8 @@ ul {
 }
 
 div.banner-content img {
-  height: 280px;
     color: #FFEF00;
+    height: 280px;
     width: auto;
     margin: auto;
     display: block;
@@ -220,6 +226,7 @@ div.banner-content h6 {
 }
 
 div.about-us {
+    height: 575px;
     width: 100%;
     background-color: #8E44AD;
     display: flex;
@@ -235,7 +242,7 @@ div.about-us-content li {
     text-align: left;
     color: #FFEF00;
     margin: 5px 10px;
-    font-size: 15px;
+
 }
 
 footer {
