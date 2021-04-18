@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1618569354935" clover="3.2.0">
-  <project timestamp="1618569354935" name="All files">
-    <metrics statements="119" coveredstatements="117" conditionals="33" coveredconditionals="29" methods="27" coveredmethods="26" elements="179" coveredelements="172" complexity="0" loc="119" ncloc="119" packages="6" files="11" classes="11"/>
+<coverage generated="1618627721962" clover="3.2.0">
+  <project timestamp="1618627721963" name="All files">
+    <metrics statements="120" coveredstatements="118" conditionals="31" coveredconditionals="27" methods="27" coveredmethods="26" elements="178" coveredelements="171" complexity="0" loc="120" ncloc="120" packages="6" files="11" classes="11"/>
     <package name="server">
-      <metrics statements="14" coveredstatements="14" conditionals="6" coveredconditionals="5" methods="0" coveredmethods="0"/>
+      <metrics statements="13" coveredstatements="13" conditionals="4" coveredconditionals="3" methods="0" coveredmethods="0"/>
       <file name="app.js" path="/home/rendra/workspace/hacktiv8/hacktiv8-phase3/Outspokenspot/server/app.js">
-        <metrics statements="14" coveredstatements="14" conditionals="6" coveredconditionals="5" methods="0" coveredmethods="0"/>
+        <metrics statements="13" coveredstatements="13" conditionals="4" coveredconditionals="3" methods="0" coveredmethods="0"/>
         <line num="1" count="2" type="cond" truecount="3" falsecount="1"/>
         <line num="2" count="2" type="stmt"/>
         <line num="5" count="2" type="stmt"/>
@@ -13,13 +13,12 @@
         <line num="7" count="2" type="stmt"/>
         <line num="8" count="2" type="stmt"/>
         <line num="9" count="2" type="stmt"/>
-        <line num="10" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="2" type="stmt"/>
         <line num="12" count="2" type="stmt"/>
         <line num="13" count="2" type="stmt"/>
         <line num="14" count="2" type="stmt"/>
         <line num="15" count="2" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
       </file>
     </package>
     <package name="server.controllers">
@@ -27,8 +26,8 @@
       <file name="gameController.js" path="/home/rendra/workspace/hacktiv8/hacktiv8-phase3/Outspokenspot/server/controllers/gameController.js">
         <metrics statements="5" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
-        <line num="6" count="2" type="stmt"/>
-        <line num="8" count="2" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="16" count="2" type="stmt"/>
       </file>
@@ -38,34 +37,36 @@
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
         <line num="7" count="7" type="stmt"/>
-        <line num="14" count="7" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="27" count="6" type="stmt"/>
-        <line num="32" count="6" type="stmt"/>
-        <line num="34" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="35" count="1" type="stmt"/>
-        <line num="36" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="37" count="1" type="stmt"/>
-        <line num="39" count="4" type="stmt"/>
-        <line num="41" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="42" count="2" type="stmt"/>
-        <line num="44" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="7" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="26" count="6" type="stmt"/>
+        <line num="31" count="6" type="stmt"/>
+        <line num="33" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="38" count="4" type="stmt"/>
+        <line num="40" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="43" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="1" type="stmt"/>
         <line num="45" count="1" type="stmt"/>
-        <line num="46" count="1" type="stmt"/>
-        <line num="48" count="1" type="stmt"/>
-        <line num="54" count="1" type="stmt"/>
-        <line num="61" count="1" type="stmt"/>
-        <line num="68" count="2" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="67" count="2" type="stmt"/>
       </file>
     </package>
     <package name="server.helpers">
-      <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+      <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
       <file name="jwt-helper.js" path="/home/rendra/workspace/hacktiv8/hacktiv8-phase3/Outspokenspot/server/helpers/jwt-helper.js">
-        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
-        <line num="4" count="5" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
         <line num="6" count="2" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
       </file>
       <file name="password-helper.js" path="/home/rendra/workspace/hacktiv8/hacktiv8-phase3/Outspokenspot/server/helpers/password-helper.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
@@ -84,13 +85,13 @@
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="4" count="2" type="stmt"/>
-        <line num="5" count="5" type="stmt"/>
-        <line num="6" count="5" type="stmt"/>
-        <line num="7" count="4" type="stmt"/>
-        <line num="11" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="11" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="12" count="1" type="stmt"/>
-        <line num="14" count="2" type="stmt"/>
-        <line num="15" count="2" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
         <line num="22" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>

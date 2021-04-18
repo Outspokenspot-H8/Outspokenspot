@@ -1,12 +1,14 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
-import '../styles/Logres.css';
+import '../styles/Logres.css'
 import axios from 'axios'
-
+import { socket } from '../connections/socketio'
 
 export default function Login() {
-
   const history = useHistory()
+
+  useEffect(() => {
+  }, [])
 
   const [dataLogin, setDataLogin] = useState({
     email: "",
@@ -25,8 +27,11 @@ export default function Login() {
       }
     })
       .then(response => {
-        console.log(response, '===');
-        localStorage.setItem('access_token', response.data.access_token) 
+        localStorage.setItem('id', response.data.id)
+        localStorage.setItem('access_token', response.data.access_token)
+        localStorage.setItem('username', response.data.username)
+        localStorage.setItem('location', response.data.location)
+        socket.emit('login', response.data.username)
         history.push('/')
       })
       .catch(err => {
@@ -45,7 +50,7 @@ export default function Login() {
   return (
     <div class="container">
         <div class="row px-3">
-          <div class="card col-lg-10 flex-row mx-auto px-0">
+          <div class="card col-lg-10 flex-row mx-auto px-0" style={{marginTop: "100px"}}>
             <div class="img-left d-none d-md-flex"></div>
             <div class="card-body">
               <h4 class="title text-center mt-4">
@@ -55,7 +60,7 @@ export default function Login() {
                 <div class="form-input">
                   <span><i class="bi bi-envelope"></i></span>
                   <input 
-                    type="email" 
+                    type="email"
                     name="email"
                     onChange={changeData}
                     value={dataLogin.email} 
