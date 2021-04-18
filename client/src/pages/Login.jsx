@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
-import '../styles/Logres.css'
+// import '../styles/Logres.css'
 import axios from 'axios'
 import { socket } from '../connections/socketio'
 
@@ -14,7 +14,7 @@ export default function Login() {
     email: "",
     password: ""
   })
-  
+
   const login = (e) => {
     e.preventDefault()
     console.log('masuk login');
@@ -59,22 +59,22 @@ export default function Login() {
               <form onSubmit={login} class="form-box px-3" action="">
                 <div class="form-input">
                   <span><i class="bi bi-envelope"></i></span>
-                  <input 
+                  <input
                     type="email"
                     name="email"
                     onChange={changeData}
-                    value={dataLogin.email} 
-                    placeholder="email address" 
+                    value={dataLogin.email}
+                    placeholder="email address"
                     required/>
                 </div>
                 <div class="form-input">
                   <span><i class="bi bi-key"></i></span>
-                  <input 
-                    type="password" 
+                  <input
+                    type="password"
                     name="password"
                     onChange={changeData}
-                    value={dataLogin.password} 
-                    placeholder="password" 
+                    value={dataLogin.password}
+                    placeholder="password"
                     required/>
                 </div>
                 <div class="mb-3">
@@ -90,7 +90,7 @@ export default function Login() {
                 <p>{dataLogin.email}</p>
                 <p>{dataLogin.password}</p>
               </form>
-            </div> 
+            </div>
           </div>
         </div>
       </div>

@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
 
 import Lobby from './pages/Lobby.jsx'
@@ -18,19 +19,20 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/lobby">
-          <Lobby />
-        </Route>
-        <Route path="/room/:name">
-          <Navbar />
-          <Room />
-        </Route>
-        <Route path="/play/:name">
-          <Navbar />
-          <Play />
-        </Route>
+        <Route
+          path="/lobby"
+          render={() => localStorage.access_token ? <Lobby/> : <Redirect to="/"/> }
+        />
+        <Route
+          path="/room/:name"
+          render={() => localStorage.access_token ? <Room/> : <Redirect to="/"/> }
+        />
+        <Route
+          path="/play/:name"
+          render={() => localStorage.access_token ? <Play/> : <Redirect to="/"/> }
+        />
         <Route exact path="/">
-          <LoginRegister />
+          { localStorage.access_token ? (<Redirect to="/lobby" />)  : ( <LoginRegister/> ) }
         </Route>
       </Switch>
     </Router>
