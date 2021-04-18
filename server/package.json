@@ -11,7 +11,7 @@
     "db:migrate:development": "sequelize db:migrate --env development",
     "db:seed:all:development": "sequelize db:seed:all --env development",
     "test": "NODE_ENV=test npx jest --detectOpenHandles --forceExit --runInBand --coverage",
-    "dev": "set NODE_ENV=development&& nodemon ./bin/https.js"
+    "dev": "NODE_ENV=development nodemon ./bin/https.js"
   },
   "keywords": [],
   "author": "",
