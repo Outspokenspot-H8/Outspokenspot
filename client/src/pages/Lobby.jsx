@@ -3,10 +3,21 @@ import '../styles/style-play.css'
 import LobbyCard from '../components/LobbyCard'
 import SideBar from '../components/SideBar'
 import { socket } from '../connections/socketio'
+import {useHistory} from 'react-router-dom'
 
 export default function Lobby() {
+  const history = useHistory()
+
   const [rooms, setRooms] = useState([])
   const [roomName, setRoomName] = useState('')
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('id')
+    localStorage.removeItem('username')
+    localStorage.removeItem('location')
+    history.push('/')
+  }
 
   const handleOnChange = (e) => {
     setRoomName(e.target.value)
@@ -39,7 +50,7 @@ export default function Lobby() {
       <SideBar />
       <main>
         <div className="d-flex justify-content-end mx-4">
-          <button type="button" className="btn btn-danger mt-4" id="logout">LOG OUT</button>
+          <button onClick={handleLogout} type="button" className="btn btn-danger mt-4" id="logout">LOG OUT</button>
         </div>
         <div className="banner-lobby">
           <h1 className="mt-4" style={{color: "#FFEF00"}}>Outspoken Room</h1>
