@@ -327,4 +327,20 @@ html, body, h1, h2, h3, h4, h5, h6, p, a, button {
   -webkit-transition: all .3s ease;
   transition: all .3s ease;
 }
+
+.card {
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 15px !important;
+  box-shadow: 1rem 1rem 1rem 0 rgba(0,0,0,0.3);
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.title {
+  margin-bottom: 2rem;
+}
+
 /*# sourceMappingURL=logres.css.map */
