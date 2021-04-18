@@ -11,12 +11,10 @@ const StyledVideo = styled.video`
 
 export default function Video(props) {
   const ref = useRef();
-  console.log(props);
-
+  
   useEffect(() => {
       props?.peer?.on("stream", stream => {
           ref.current.srcObject = stream;
-          console.log(ref);
       })
   }, [props]);
 

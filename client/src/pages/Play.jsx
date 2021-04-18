@@ -50,8 +50,9 @@ export default function Play() {
     socketRef.current = socket
     navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true})
       .then((stream) => {
+        console.log(stream, "ini stream")
         userVideo.current.srcObject = stream;
-        socketRef.current.emit('join-play', name)
+        socketRef.current.emit('join-play', {name, username: localStorage.username})
         socketRef.current.on('other-users', (otherUsers) => {
           const peers = []
           otherUsers?.forEach(otherUser => {
@@ -115,7 +116,7 @@ export default function Play() {
 
     return peer;
   }
-  console.log(peers);
+  console.log(socketRef, "ini di play");
   return (
     <main>
       <div class="banner-play">

@@ -52,7 +52,7 @@ export default function Login() {
         <div class="row px-3">
           <div class="card col-lg-10 flex-row mx-auto px-0" style={{marginTop: "100px"}}>
             <div class="img-left d-none d-md-flex"></div>
-            <div class="card-body">
+            <div class="card-body flex-fill">
               <h4 class="title text-center mt-4">
                 Login to your account
               </h4>

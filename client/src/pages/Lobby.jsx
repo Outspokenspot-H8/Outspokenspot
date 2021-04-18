@@ -21,6 +21,13 @@ export default function Lobby() {
     setRoomName('')
   }
 
+  useEffect (() => {
+    navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      .then(()=> {
+        console.log("permission")
+      })
+  }, [])
+
   useEffect(() => {
     socket.on('get-rooms', (roomsServer) => {
       setRooms(roomsServer)

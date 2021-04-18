@@ -87,7 +87,7 @@ export default function LoginRegister() {
 
   return (
     <div class="banner">
-      <div class="banner-content text-center flex-fill">
+      <div class="banner-content text-center">
         <img src={OutspokenspotCard} alt="outspoketspot-cards" />
         <h4>This is not a game, more like an intimate session with your friend, family, or your partner. Be honest, be outspoken.</h4>
       </div>

@@ -35,8 +35,12 @@ io.on('connection', (socket) => {
   socket.on('join-room', (data) => {
     socket.join(data['room-name'])
     let roomIndex = rooms.findIndex((room) => room.name === data['room-name'] )
-    rooms[roomIndex].users.push(data.user)
-    console.log(JSON.stringify(rooms[roomIndex]));
+    const exist = rooms[roomIndex].users.find(user => user.username === data.user.username);
+    
+    if(!exist){
+      rooms[roomIndex].users.push(data.user);
+    }
+
     io.sockets.to(data['room-name']).emit('room-detail', rooms[roomIndex])
   })
 
@@ -54,13 +58,14 @@ io.on('connection', (socket) => {
     io.sockets.to(name).emit('fetched-room-detail', rooms[roomIndex])
   })
 
-  socket.on('join-play', (name) => {
+  socket.on('join-play', ({name, username}) => {
     let roomIndex = rooms.findIndex((room) => room.name === name )
     console.log(rooms[roomIndex], 'Room index di join play');
+    console.log(username, "INI USer")
     let otherUsers;
     let otherUsersSocketID;
     if (rooms[roomIndex]) {
-      otherUsers = rooms[roomIndex].users.filter(user => user.socketId !== socket.id )
+      otherUsers = rooms[roomIndex].users.filter(user => user.username !== username ) //satu edit nanti
       otherUsersSocketID = otherUsers.map(user => user.socketId)
     }
     

@@ -30,8 +30,8 @@ export default function Room() {
   }, [])
 
   const handleStartGame = () => {
-    socket.emit('start-game', room.name)
     history.push(`/play/${room.name}`)
+    socket.emit('start-game', room.name)
   }
 
   return (
