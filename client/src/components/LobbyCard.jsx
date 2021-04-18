@@ -1,12 +1,13 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Avatar from '../assets/avatar.png'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { socket } from '../connections/socketio'
+import Swal from 'sweetalert2'
 
 export default function LobbyCard({room}) {
   const history = useHistory()
 
-  const handleJoin = () => {
+  const handleJoin = (e) => {
     let payload = {
       "room-name": room.name,
       user: {
@@ -16,8 +17,20 @@ export default function LobbyCard({room}) {
         socketId: socket.id
       }
     }
-    socket.emit('join-room', payload)
-    history.push(`/room/${room.name}`)
+
+    if (room.users.length < 4 ) {
+      socket.emit('join-room', payload)
+      history.push(`/room/${room.name}`)
+
+    } else {
+      console.log(room.users.length);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Room sudah penuh!',
+      })
+      history.push('/lobby') 
+    }  
   }
 
   return (

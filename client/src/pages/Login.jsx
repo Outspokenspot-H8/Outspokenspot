@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
-import '../styles/Logres.css'
+// import '../styles/Logres.css'
 import axios from 'axios'
 import { socket } from '../connections/socketio'
 
