@@ -86,6 +86,29 @@ io.on('connection', (socket) => {
   socket.on('start-game', (payload) => {
     io.sockets.in(payload.name).emit('get-random-questions', payload.questions)
   })
+  
+  socket.on('disconnect', () => {
+    let leavedRoom;
+    rooms.forEach(room => {
+      room.users.forEach(user => {
+        if (user.socketId === socket.id) {
+          leavedRoom = room
+        }
+      })
+    })
+
+    let otherUsers;
+    let otherUsersSocketID;
+
+    if (leavedRoom) {
+      otherUsers = leavedRoom.users.filter(user => user.socketId !== socket.id )
+      otherUsersSocketID = otherUsers.map(user => user.socketId)
+    }
+
+    console.log(otherUsersSocketID, 'Ini otherID yang leave');
+
+    socket.broadcast.emit('user-left', socket.id);
+  })
 })
 
 server.listen(port, () => {
