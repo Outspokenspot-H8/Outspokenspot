@@ -16,7 +16,6 @@ export default function Lobby() {
     localStorage.removeItem('id')
     localStorage.removeItem('username')
     localStorage.removeItem('location')
-    history.push('/')
   }
 
   const handleOnChange = (e) => {
@@ -50,7 +49,7 @@ export default function Lobby() {
       <SideBar />
       <main>
         <div className="d-flex justify-content-end mx-4">
-          <button onClick={() => handleLogout()} type="button" className="btn btn-danger mt-4" id="logout">LOG OUT</button>
+          <a onClick={handleLogout} href="/" type="button" className="btn btn-danger mt-4" id="logout">LOG OUT</a>
         </div>
         <div className="banner-lobby">
           <h1 className="mt-4" style={{color: "#FFEF00"}}>Outspoken Room</h1>

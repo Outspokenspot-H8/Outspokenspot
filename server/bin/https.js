@@ -103,15 +103,20 @@ io.on('connection', (socket) => {
 
     let otherUsers;
     let otherUsersSocketID;
+    let leavedUser;
+    let findIndex;
 
     if (leavedRoom) {
-      otherUsers = leavedRoom.users.filter(user => user.socketId !== socket.id )
+      otherUsers = leavedRoom.users.filter(user => user.socketId !== socket.id)
       otherUsersSocketID = otherUsers.map(user => user.socketId)
+      leavedUser = leavedRoom.users.filter(user => user.socketId === socket.id)
+      findIndex = leavedRoom.users.indexOf(leavedUser[0])
+      leavedRoom.users.splice(findIndex, 1)
     }
 
-    console.log(otherUsersSocketID, 'Ini otherID yang leave');
+    console.log(leavedRoom, 'Ini updated room');
 
-    socket.broadcast.emit('user-left', socket.id);
+    socket.broadcast.emit('user-left', {id: socket.id, leavedRoom});
   })
 })
 
