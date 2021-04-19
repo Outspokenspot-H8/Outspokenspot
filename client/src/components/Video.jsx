@@ -6,7 +6,9 @@ const StyledVideo = styled.video`
   width: 100%;
   position: absolute;
   bottom: 0;
-  z-index: 1
+  z-index: 1;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 `;
 
 export default function Video(props) {

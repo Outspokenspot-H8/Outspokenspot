@@ -11,7 +11,9 @@ const StyledVideo = styled.video`
     width: 100%;
     position: absolute;
     bottom: 0;
-    z-index: 1
+    z-index: 1;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
 `;
 
 const videoConstraints = {
@@ -50,7 +52,6 @@ export default function Play() {
     socketRef.current = socket
     navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true})
       .then((stream) => {
-        console.log(stream, "ini stream")
         userVideo.current.srcObject = stream;
         socketRef.current.emit('join-play', {name, username: localStorage.username})
         socketRef.current.on('other-users', (otherUsers) => {
@@ -80,8 +81,8 @@ export default function Play() {
           //   peerID: payload.callerID
           // }
 
-          // Ini bikin double
-          // setPeers(users => [...users, peer])
+          // // Ini bikin double
+          // setPeers(users => [...users, peerObj])
         })
 
         socketRef.current.on('receiving-returned-signal', payload => {
@@ -99,7 +100,6 @@ export default function Play() {
           setPeers(peers)
         })
       })
-
   }, [])
 
   const createPeer = (userToSignal, callerID, stream) => {
@@ -110,7 +110,7 @@ export default function Play() {
     });
 
     peer.on("signal", signal => {
-      socketRef.current.emit("sending-signal", { userToSignal, callerID, signal })
+      socketRef.current.emit("sending-signal", { userToSignal, callerID, signal, name })
     })
 
     return peer;
@@ -131,7 +131,8 @@ export default function Play() {
 
     return peer;
   }
-  console.log(socketRef, "ini di play");
+
+  console.log(peers, 'INI PEER')
   return (
     <main>
       <div class="banner-play">
@@ -146,7 +147,7 @@ export default function Play() {
           </div>
         </div>
           {
-            peers.map(peer => {
+            peers?.map(peer => {
               return <PlayerCard key={peer.peerID} peer={peer}/>;
             })
           }

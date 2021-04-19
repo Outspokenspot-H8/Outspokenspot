@@ -59,6 +59,7 @@ header {
 }
 .banner-lobby .row {
   --bs-gutter-x: 0rem;
+  margin-right: 0px;
 }
 
 #nav button{

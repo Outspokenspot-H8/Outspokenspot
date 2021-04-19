@@ -23,7 +23,7 @@ export default function Room() {
       setRoom(roomDetail)
     })
     setUser(localStorage.username)
-
+    
     socket.on('started-game', (data) => {
       history.push(`/play/${data}`)
     })

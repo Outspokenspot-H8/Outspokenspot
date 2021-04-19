@@ -37,6 +37,9 @@ export default function Lobby() {
       .then(()=> {
         console.log("permission")
       })
+    socket.on('exist-room', () => {
+      console.log("EXIST")
+    })
   }, [])
 
   useEffect(() => {
