@@ -134,7 +134,7 @@ export default function Play() {
           console.log(initiatePlayersRef.current);
           setPlayerRemaining(initiatePlayersRef.current)
           setIsShufflingCard(true)
-          setQuestion({question: 'Shuffle next question'})
+          setQuestion({question: 'Shuffle Next Question'})
           setRandomTurnButton(false)
           setIsRandomTurnPlayer(false)
         } else {
@@ -264,13 +264,30 @@ export default function Play() {
               <div>
                 {
                   isShufflingCard ?
-                  <button onClick={()=> shuffleCard()} class="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+                  <div>
+                    <button onClick={()=> shuffleCard()} class="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+                  </div>
                   :
                   <></>
                 }
                 {
-                  randomTurnButton ?
-                  <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                  randomTurnButton && !playerTurn.username ?
+                  <div className="d-flex justify-content-center">
+                    <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                  </div>
+                  :
+                  <></>
+                }
+                {
+                  randomTurnButton && localStorage.username === playerTurn.username ?
+                  <div className="d-flex justify-content-center">
+                    <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                  </div>
+                  :
+                  !isShufflingCard ? 
+                  <div className="d-flex justify-content-center">
+                    <p>Waiting player to click Turn button...</p>
+                  </div>
                   :
                   <></>
                 }
