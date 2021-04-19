@@ -23,15 +23,16 @@ io.on('connection', (socket) => {
     let room = {
       name: payload['room-name'],
       users: [],
+      max: payload.max,
       admin: payload.admin,
       isStarted: false,
     }
     const filtered = rooms.filter(roomExist => roomExist.name === room.name)
     if(filtered.length !== 0){
-      io.emit('exist-room')
+      socket.emit('updated-room')
     } else {
       rooms.push(room)
-      io.emit('updated-room', rooms)
+      socket.emit('updated-room', rooms)
     }
   })
 

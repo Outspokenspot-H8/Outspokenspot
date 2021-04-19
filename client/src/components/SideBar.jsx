@@ -1,6 +1,7 @@
 import React from 'react'
 import Logo from '../assets/outspokenspot-cards.png'
 import Swal from 'sweetalert2'
+import { socket } from '../connections/socketio'
 
 
 export default function SideBar() {
@@ -23,14 +24,28 @@ export default function SideBar() {
       }
     ]).then((result) => {
       if (result.value) {
-        const answers = JSON.stringify(result.value)
-        Swal.fire({
-          title: 'All done!',
-          html: `
-            Your answers:
-            <pre><code>${answers}</code></pre>
-          `,
-          confirmButtonText: 'Lovely!'
+        let payload = {
+          'room-name': result.value[0],
+          max: Number(result.value[1]),
+          admin: localStorage.username,
+        }
+        socket.emit('create-room', payload)
+        socket.on('updated-room', (data) => {
+          if(data){
+            Swal.fire({
+              icon: 'success',
+              title: 'Success Create Room!',
+              text: `You are an admin in ${result.value[0]} Room`,
+              confirmButtonText: 'Done'
+            })
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Failed Create Room!',
+              text: `Room has been exist!`,
+              confirmButtonText: 'Done'
+            })
+          }
         })
       }
     })

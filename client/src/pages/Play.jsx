@@ -8,18 +8,17 @@ import styled from 'styled-components'
 import axios from 'axios'
 
 const StyledVideo = styled.video`
-    height: 140%;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    z-index: 1;
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
+  height: auto;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 `;
 
 const videoConstraints = {
-  height: window.innerHeight / 2,
-  width: window.innerWidth / 2
+  height: window.innerHeight,
+  width: window.innerWidth
 };
 
 // const Video = (props) => {
@@ -183,7 +182,6 @@ export default function Play() {
     return peer;
   }
 
-  console.log(peers, 'INI PEER')
   const getCard = () => {
     axios({
       method:'GET',
@@ -226,13 +224,13 @@ export default function Play() {
     <main>
       <div class="banner-play">
         <div class="d-flex flex-column m-3 card" style={{width: "21rem", height: "40%"}}>
-          <div class="flex-fill align-items-start d-flex justify-content-center bg-secondary" style={{height: "50%"}}>
+          <div class="flex-fill align-items-start d-flex justify-content-center bg-secondary" style={{height: "60%"}}>
             <StyledVideo className="img-fluid" muted ref={userVideo} autoPlay playsInline />
             {/* <img class="my-3" src={Avatar} alt="Card image cap" style={{height: "100px"}} /> */}
           </div>
-          <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center bg-light" style={{zIndex: "2"}}>
+          <div class="flex-fill d-flex justify-content-around align-items-center flex-row text-center bg-light" style={{zIndex: "2"}}>
             <h3>{localStorage.username}</h3>
-            <p>Location: {localStorage.location}</p>
+            <p style={{margin: '0px'}}>{localStorage.location}</p>
           </div>
         </div>
           {

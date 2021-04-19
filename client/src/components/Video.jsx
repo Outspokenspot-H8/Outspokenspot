@@ -2,10 +2,9 @@ import React, {useRef, useEffect} from 'react'
 import styled from 'styled-components'
 
 const StyledVideo = styled.video`
-  height: 140%;
-  width: 100%;
+  height: auto;
   position: absolute;
-  bottom: 0;
+  top: 0;
   z-index: 1;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
