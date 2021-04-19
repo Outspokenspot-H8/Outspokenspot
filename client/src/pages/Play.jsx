@@ -103,14 +103,15 @@ export default function Play() {
           item.peer.signal(payload.signal)
         })
 
-        socketRef.current.on('user-left', (id) => {
-          const peerObj = peersRef.current.find(peer => peer.peerID === id);
+        socketRef.current.on('user-left', (payload) => {
+          const peerObj = peersRef.current.find(peer => peer.peerID === payload.id);
           if (peerObj) {
             peerObj.peer.destroy()
           }
-          const peers = peersRef.current.filter(peer => peer.peerID !== id);
+          const peers = peersRef.current.filter(peer => peer.peerID !== payload.id);
           peersRef.current = peers
           setPeers(peers)
+          initiatePlayersRef.current = payload.leavedRoom.users
         })
       })
 
