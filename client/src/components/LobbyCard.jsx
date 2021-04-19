@@ -18,7 +18,7 @@ export default function LobbyCard({room}) {
       }
     }
 
-    if (room.users.length < 4 ) {
+    if (room.users.length < room.max ) {
       socket.emit('join-room', payload)
       history.push(`/room/${room.name}`)
 
