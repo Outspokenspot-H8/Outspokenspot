@@ -55,6 +55,7 @@ io.on('connection', (socket) => {
   socket.on('start-game', (data) => {
     let roomIndex = rooms.findIndex((room) => room.name === data)
     rooms[roomIndex].isStarted = true
+    // console.log(roomIndex)
     socket.broadcast.to(data).emit('started-game', data)
   })
 
@@ -65,7 +66,7 @@ io.on('connection', (socket) => {
   
   socket.on('fetch-room-detail', (name) => {
     let roomIndex = rooms.findIndex((room) => room.name === name )
-    io.sockets.to(name).emit('fetched-room-detail', rooms[roomIndex])
+    io.sockets.in(name).emit('fetched-room-detail', rooms[roomIndex])
   })
 
   socket.on('join-play', ({name, username}) => {
@@ -88,6 +89,18 @@ io.on('connection', (socket) => {
     io.to(payload.callerID).emit('receiving-returned-signal', { signal: payload.signal, id: socket.id });
   })
 
+  socket.on('shuffle-card', (payload) => {
+    io.sockets.in(payload.name).emit('get-random-question', {question: payload.question, questions: payload.questions, index: payload.index})
+  })
+
+  socket.on('shuffle-user-turn', (payload) => {
+    io.sockets.in(payload.name).emit('get-random-player', {player: payload.player, players: payload.players})
+  })
+
+  socket.on('start-gameplay', (payload) => {
+    io.sockets.in(payload.name).emit('get-random-questions', payload.questions)
+  })
+  
   socket.on('disconnect', () => {
     let leavedRoom;
     rooms.forEach(room => {
