@@ -43,7 +43,8 @@ export default function Play() {
   const [questions, setQuestions] = useState([])
   const [question, setQuestion] = useState({})
   const [isStart, setIsStart] = useState(false)
-  const [initiatePlayers, setInitiatePlayers] = useState([])
+  // const [initiatePlayers, setInitiatePlayers] = useState([])
+  const initiatePlayersRef = useRef([])
   const [playerRemaining, setPlayerRemaining] = useState([])
   const [playerTurn, setPlayerTurn] = useState({})
   const [isShufflingCard, setIsShufflingCard] = useState(true)
@@ -56,8 +57,8 @@ export default function Play() {
       console.log(roomDetail);
       console.log(roomDetail.users, 'Ini room detail users');
       setRoom(roomDetail)
-      setInitiatePlayers(roomDetail.users)
       setPlayerRemaining(roomDetail.users)
+      initiatePlayersRef.current = roomDetail.users
     })
     socketRef.current = socket
     navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true})
@@ -129,7 +130,8 @@ export default function Play() {
         console.log(payload.players, 'INI PLAYERS YG MASUK DI SOCKETON');
         if (payload.players.length === 0) {
           console.log(payload.players, 'MASUK KE 0 PLAYER');
-          setPlayerRemaining(initiatePlayers)
+          console.log(initiatePlayersRef.current);
+          setPlayerRemaining(initiatePlayersRef.current)
           setIsShufflingCard(true)
           setIsRandomTurnPlayer(false)
         } else {
@@ -138,14 +140,20 @@ export default function Play() {
             console.log(payload.player, 'INI PAYLOAD.PLAYER DI LENGTH === 1');
             console.log(payload.players, 'INI MASUK KE PLAYER REMAINING === 1');
             let index = payload.players.indexOf(payload.player)
-            console.log(index, 'INI INDEX PAYLOAD.PLAYER');
+            console.log(index, 'INI INDEX PAYLOAD.PLAYER === 1');
             setPlayerTurn(payload.player)
             let result = []
-            console.log(result, 'SLICE DI SOCKETON');
+            console.log(result, 'SLICE DI SOCKETON === 1');
             setPlayerRemaining(result)
           } else {
+            console.log(payload.player, 'INI PAYLOAD.PLAYER DI LENGTH !== 1');
+            console.log(payload.players, 'INI MASUK KE PLAYER REMAINING !== 1');
             setPlayerTurn(payload.player)
-            setPlayerRemaining(payload.players)
+            let index = payload.players.indexOf(payload.player)
+            let result = [...payload.players.slice(0, payload.index), ...payload.players.slice(payload.index + 1)]
+            console.log(payload.index, 'INI INDEX PAYLOAD.PLAYER !== 1');
+            console.log(result, 'SLICE DI SOCKETON !== 1');
+            setPlayerRemaining(result)
           }
         }
       })
@@ -190,7 +198,7 @@ export default function Play() {
       }
     })
     .then(({data})=>{
-      socket.emit('start-game', {name, questions: data})
+      socket.emit('start-gameplay', {name, questions: data})
     })
     .catch(err => {
       console.log(err);
@@ -211,13 +219,14 @@ export default function Play() {
     let index = playerRemaining.indexOf(randomPlayer)
     let result;
     if (playerRemaining.length > 1) {
-      result = [...playerRemaining.slice(0, index), ...playerRemaining.slice(index + 1)]
-      console.log(playerRemaining, 'INI PLAYERREMANING LENGTH > 1');
-      console.log(result, 'INI RESULT LENGTH > 1');
-      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: result})
+      // result = [...playerRemaining.slice(0, index), ...playerRemaining.slice(index + 1)]
+      // console.log(playerRemaining, 'INI PLAYERREMANING LENGTH > 1');
+      // console.log(result, 'INI RESULT LENGTH > 1');
+      console.log(playerRemaining);
+      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
     } else {
       console.log(playerRemaining, 'INI LENGTH < 1');
-      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining})
+      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
     }
 
   }
@@ -254,6 +263,11 @@ export default function Play() {
             <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
           </div>
           <h2>{playerTurn?.username}</h2>
+          {/* {
+            playerRemaining.length === 0 ?
+            <></>
+            :
+          } */}
           <div class="d-flex flex-row">
             {
               isStart ?
