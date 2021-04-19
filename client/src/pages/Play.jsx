@@ -50,6 +50,7 @@ export default function Play() {
   const [playerRemaining, setPlayerRemaining] = useState([])
   const [playerTurn, setPlayerTurn] = useState({})
   const [isShufflingCard, setIsShufflingCard] = useState(true)
+  const [randomTurnButton, setRandomTurnButton] = useState(false)
   const [isRandomTurnPlayer, setIsRandomTurnPlayer] = useState(false)
   const { name } = useParams()
 
@@ -119,7 +120,7 @@ export default function Play() {
         setQuestions(payload.questions)
         setQuestion(payload.question)
         setIsShufflingCard(false)
-        setIsRandomTurnPlayer(true)
+        setRandomTurnButton(true)
       })
 
       // Start game, bawa questions
@@ -133,8 +134,11 @@ export default function Play() {
           console.log(initiatePlayersRef.current);
           setPlayerRemaining(initiatePlayersRef.current)
           setIsShufflingCard(true)
+          setQuestion({question: 'Shuffle next question'})
+          setRandomTurnButton(false)
           setIsRandomTurnPlayer(false)
         } else {
+          setIsRandomTurnPlayer(true)
           console.log(payload.players, 'INI PAYLOAD.PLAYERS MASUK KE ELSE');
           if (payload.players.length === 1) {
             setPlayerTurn(payload.player)
@@ -249,12 +253,12 @@ export default function Play() {
             <h1 id="question-text">{question ? question.question : 'Click Shuffle Card To Play'}</h1>
             <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
           </div>
-          <h2>{playerTurn?.username}</h2>
-          {/* {
-            playerRemaining.length === 0 ?
-            <></>
+          {
+            isRandomTurnPlayer && !isShufflingCard ?
+            <h2>{playerTurn?.username}</h2>
             :
-          } */}
+            <></>
+          }
           <div class="d-flex flex-row">
             {
               isStart ?
@@ -266,7 +270,7 @@ export default function Play() {
                   <></>
                 }
                 {
-                  isRandomTurnPlayer ?
+                  randomTurnButton ?
                   <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
                   :
                   <></>
