@@ -3,6 +3,7 @@ const http = require('http')
 const port = process.env.PORT || 4000
 const socketio = require('socket.io')
 const server = http.createServer(app)
+const _ = require('lodash')
 
 const io = socketio(server, {
     cors: {
@@ -15,7 +16,9 @@ let rooms = []
 
 io.on('connection', (socket) => {
   socket.on('login', (data) => {
-    const filtered = rooms.filter(room => room.isStarted === false)
+    const filtered = rooms.filter(room => {
+      return room.isStarted === false
+    })
     socket.emit('get-rooms', filtered)
   })
 
@@ -37,8 +40,13 @@ io.on('connection', (socket) => {
   })
 
   socket.on('fetch-room', () => {
-    const filtered = rooms.filter(room => room.isStarted === false)
-    socket.emit('fetched-room', filtered)
+    const filtered = _.remove(rooms, function(room) {
+      return (room.isStarted === true && room.users.length === 0)
+    })
+    const filter = rooms.filter(room => {
+      return room.isStarted === false
+    })
+    socket.emit('fetched-room', filter)
   })
   
   socket.on('join-room', (data) => {
