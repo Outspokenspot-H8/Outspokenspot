@@ -8,16 +8,17 @@ import styled from 'styled-components'
 import axios from 'axios'
 
 const StyledVideo = styled.video`
-    height: 140%;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    z-index: 1
+  height: auto;
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 `;
 
 const videoConstraints = {
-  height: window.innerHeight / 2,
-  width: window.innerWidth / 2
+  height: window.innerHeight,
+  width: window.innerWidth
 };
 
 // const Video = (props) => {
@@ -65,7 +66,7 @@ export default function Play() {
     navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true})
       .then((stream) => {
         userVideo.current.srcObject = stream;
-        socketRef.current.emit('join-play', name)
+        socketRef.current.emit('join-play', {name, username: localStorage.username})
         socketRef.current.on('other-users', (otherUsers) => {
           const peers = []
           otherUsers?.forEach(otherUser => {
@@ -93,8 +94,8 @@ export default function Play() {
           //   peerID: payload.callerID
           // }
 
-          // Ini bikin double
-          // setPeers(users => [...users, peer])
+          // // Ini bikin double
+          // setPeers(users => [...users, peerObj])
         })
 
         socketRef.current.on('receiving-returned-signal', payload => {
@@ -102,14 +103,15 @@ export default function Play() {
           item.peer.signal(payload.signal)
         })
 
-        socketRef.current.on('user-left', (id) => {
-          const peerObj = peersRef.current.find(peer => peer.peerID === id);
+        socketRef.current.on('user-left', (payload) => {
+          const peerObj = peersRef.current.find(peer => peer.peerID === payload.id);
           if (peerObj) {
             peerObj.peer.destroy()
           }
-          const peers = peersRef.current.filter(peer => peer.peerID !== id);
+          const peers = peersRef.current.filter(peer => peer.peerID !== payload.id);
           peersRef.current = peers
           setPeers(peers)
+          initiatePlayersRef.current = payload.leavedRoom.users
         })
       })
 
@@ -128,35 +130,23 @@ export default function Play() {
       })
 
       socket.on('get-random-player', (payload) => {
-        console.log(payload.players, 'INI PLAYERS YG MASUK DI SOCKETON');
         if (payload.players.length === 0) {
-          console.log(payload.players, 'MASUK KE 0 PLAYER');
           console.log(initiatePlayersRef.current);
           setPlayerRemaining(initiatePlayersRef.current)
           setIsShufflingCard(true)
-          setQuestion({question: 'Shuffle next question'})
+          setQuestion({question: 'Shuffle Next Question'})
           setRandomTurnButton(false)
           setIsRandomTurnPlayer(false)
         } else {
           setIsRandomTurnPlayer(true)
           console.log(payload.players, 'INI PAYLOAD.PLAYERS MASUK KE ELSE');
           if (payload.players.length === 1) {
-            console.log(payload.player, 'INI PAYLOAD.PLAYER DI LENGTH === 1');
-            console.log(payload.players, 'INI MASUK KE PLAYER REMAINING === 1');
-            let index = payload.players.indexOf(payload.player)
-            console.log(index, 'INI INDEX PAYLOAD.PLAYER === 1');
             setPlayerTurn(payload.player)
             let result = []
-            console.log(result, 'SLICE DI SOCKETON === 1');
             setPlayerRemaining(result)
           } else {
-            console.log(payload.player, 'INI PAYLOAD.PLAYER DI LENGTH !== 1');
-            console.log(payload.players, 'INI MASUK KE PLAYER REMAINING !== 1');
             setPlayerTurn(payload.player)
-            let index = payload.players.indexOf(payload.player)
             let result = [...payload.players.slice(0, payload.index), ...payload.players.slice(payload.index + 1)]
-            console.log(payload.index, 'INI INDEX PAYLOAD.PLAYER !== 1');
-            console.log(result, 'SLICE DI SOCKETON !== 1');
             setPlayerRemaining(result)
           }
         }
@@ -171,7 +161,7 @@ export default function Play() {
     });
 
     peer.on("signal", signal => {
-      socketRef.current.emit("sending-signal", { userToSignal, callerID, signal })
+      socketRef.current.emit("sending-signal", { userToSignal, callerID, signal, name })
     })
 
     return peer;
@@ -218,15 +208,11 @@ export default function Play() {
   }
 
   const shuffleUserTurn = () => {
-    console.log(playerRemaining, 'INI AWAL PLAYER REMAINIG');
     let randomPlayer = playerRemaining[Math.floor(Math.random() * playerRemaining.length)]
     let index = playerRemaining.indexOf(randomPlayer)
     let result;
     if (playerRemaining.length > 1) {
       // result = [...playerRemaining.slice(0, index), ...playerRemaining.slice(index + 1)]
-      // console.log(playerRemaining, 'INI PLAYERREMANING LENGTH > 1');
-      // console.log(result, 'INI RESULT LENGTH > 1');
-      console.log(playerRemaining);
       socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
     } else {
       console.log(playerRemaining, 'INI LENGTH < 1');
@@ -239,17 +225,17 @@ export default function Play() {
     <main>
       <div class="banner-play">
         <div class="d-flex flex-column m-3 card" style={{width: "21rem", height: "40%"}}>
-          <div class="flex-fill align-items-start d-flex justify-content-center bg-secondary" style={{height: "50%"}}>
+          <div class="flex-fill align-items-start d-flex justify-content-center bg-secondary" style={{height: "60%"}}>
             <StyledVideo className="img-fluid" muted ref={userVideo} autoPlay playsInline />
             {/* <img class="my-3" src={Avatar} alt="Card image cap" style={{height: "100px"}} /> */}
           </div>
-          <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center bg-light" style={{zIndex: "2"}}>
+          <div class="flex-fill d-flex justify-content-around align-items-center flex-row text-center bg-light" style={{zIndex: "2"}}>
             <h3>{localStorage.username}</h3>
-            <p>Location: {localStorage.location}</p>
+            <p style={{margin: '0px'}}>{localStorage.location}</p>
           </div>
         </div>
           {
-            peers.map(peer => {
+            peers?.map(peer => {
               return <PlayerCard key={peer.peerID} peer={peer}/>;
             })
           }
@@ -278,13 +264,30 @@ export default function Play() {
               <div>
                 {
                   isShufflingCard ?
-                  <button onClick={()=> shuffleCard()} class="btn btn-secondary my-1 mx-2">Shuffle Card</button>
+                  <div>
+                    <button onClick={()=> shuffleCard()} class="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+                  </div>
                   :
                   <></>
                 }
                 {
-                  randomTurnButton ?
-                  <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                  randomTurnButton && !playerTurn.username ?
+                  <div className="d-flex justify-content-center">
+                    <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                  </div>
+                  :
+                  <></>
+                }
+                {
+                  randomTurnButton && localStorage.username === playerTurn.username ?
+                  <div className="d-flex justify-content-center">
+                    <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                  </div>
+                  :
+                  !isShufflingCard ? 
+                  <div className="d-flex justify-content-center">
+                    <p>Waiting player to click Turn button...</p>
+                  </div>
                   :
                   <></>
                 }

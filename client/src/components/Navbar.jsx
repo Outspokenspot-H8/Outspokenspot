@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom'
 export default function Navbar() {
   const { pathname } = useLocation()
 
-  console.log(pathname);
   return (
     <header>
       <div id="logo">
