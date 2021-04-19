@@ -94,7 +94,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('shuffle-user-turn', (payload) => {
-    io.sockets.in(payload.name).emit('get-random-player', {player: payload.player, players: payload.players})
+    io.sockets.in(payload.name).emit('get-random-player', {player: payload.player, players: payload.players, index: payload.index})
   })
 
   socket.on('start-gameplay', (payload) => {
