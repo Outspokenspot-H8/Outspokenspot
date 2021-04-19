@@ -43,7 +43,6 @@ export default function Play() {
   const peersRef = useRef([])
   const [questions, setQuestions] = useState([])
   const [question, setQuestion] = useState({})
-  const randomQuestion = useRef('');
   const [isStart, setIsStart] = useState(false)
   // const [initiatePlayers, setInitiatePlayers] = useState([])
   const initiatePlayersRef = useRef([])
@@ -143,7 +142,7 @@ export default function Play() {
             let result = []
             setPlayerRemaining(result)
           } else {
-            setPlayerTurn(payload.player)
+            shufflePlayerAnimation(payload.player, payload.players)
             let result = [...payload.players.slice(0, payload.index), ...payload.players.slice(payload.index + 1)]
             setPlayerRemaining(result)
           }
@@ -218,13 +217,23 @@ export default function Play() {
     }, 5);
 
     setTimeout(function () {
-      randomQuestion.current = question
       setQuestion(question)
     }, 2180)
   }
 
-  // const shufflePlayerAnimation = () => {
-  // }
+  const shufflePlayerAnimation = (player, players) => {
+    const mulai = new Date().getTime();
+
+    setInterval(function () {
+      if (new Date().getTime() - mulai > 2000) {
+        return;
+      }
+      setPlayerTurn(players[Math.round(Math.random() * (players.length - 1))])
+    }, 100);
+    setTimeout(function () {
+      setPlayerTurn(player)
+    }, 2000)
+  }
 
   const shuffleUserTurn = () => {
     let randomPlayer = playerRemaining[Math.floor(Math.random() * playerRemaining.length)]
@@ -237,8 +246,6 @@ export default function Play() {
       socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
     }
   }
-
-  console.log(randomQuestion, "INI RANDOM")
 
   return (
     <main>
