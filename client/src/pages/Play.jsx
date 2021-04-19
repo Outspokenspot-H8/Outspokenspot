@@ -278,7 +278,7 @@ export default function Play() {
               <div>
                 {
                   isShufflingCard ?
-                  <button onClick={()=> shuffleCard()} class="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+                  <button onClick={()=> shuffleCard()} class="btn btn-secondary my-1 mx-2">Shuffle Card</button>
                   :
                   <></>
                 }

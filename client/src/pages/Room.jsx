@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom'
 export default function Room() {
   const [room, setRoom] = useState({})
   const [user, setUser] = useState('')
+  const [ava, setAva]  = useState('')
   const { name } = useParams()
   const history = useHistory()
 
@@ -27,6 +28,8 @@ export default function Room() {
     socket.on('started-game', (data) => {
       history.push(`/play/${data}`)
     })
+
+    setAva(`https://avatars.dicebear.com/api/bottts/${room.admin}.svg`)
   }, [])
 
   const handleStartGame = () => {
@@ -44,7 +47,7 @@ export default function Room() {
 
               <div class="d-flex flex-row m-3 card" style={{width: "20rem"}}>
                 <div class="flex-fill d-flex flex-column align-items-center justify-content-center">
-                  <img class="my-3" src={Avatar} alt="Card image cap" />
+                  <img class="my-3" src={ava} alt="Card image cap" />
                   <h4>Admin</h4>
                 </div>
                 <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center">

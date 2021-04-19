@@ -6,6 +6,11 @@ import Swal from 'sweetalert2'
 
 export default function LobbyCard({room}) {
   const history = useHistory()
+  const [ava, setAva] = useState('')
+
+  useEffect(() => {
+    setAva(`https://avatars.dicebear.com/api/bottts/${room.admin}.svg`)
+  }, [])
 
   const handleJoin = (e) => {
     let payload = {
@@ -29,14 +34,14 @@ export default function LobbyCard({room}) {
         title: 'Oops...',
         text: 'Room sudah penuh!',
       })
-      history.push('/lobby') 
-    }  
+      history.push('/lobby')
+    }
   }
 
   return (
     <div className="d-flex flex-row m-3 card" style={{width: "20rem", height: "15rem"}}>
       <div className="flex-fill d-flex flex-column align-items-center justify-content-center" id="content">
-        <img className="my-2" src={Avatar} alt="Card image cap" />
+        <img className="my-2" src={ava} alt="Card image cap" />
         <span>Admin</span>
         <span>{room.admin}</span>
         <button onClick={() => handleJoin()} className="btn btn-outline-warning my-2">Join</button>
