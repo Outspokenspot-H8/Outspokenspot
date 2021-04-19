@@ -129,9 +129,7 @@ export default function Play() {
       })
 
       socket.on('get-random-player', (payload) => {
-        console.log(payload.players, 'INI PLAYERS YG MASUK DI SOCKETON');
         if (payload.players.length === 0) {
-          console.log(payload.players, 'MASUK KE 0 PLAYER');
           console.log(initiatePlayersRef.current);
           setPlayerRemaining(initiatePlayersRef.current)
           setIsShufflingCard(true)
@@ -139,22 +137,12 @@ export default function Play() {
         } else {
           console.log(payload.players, 'INI PAYLOAD.PLAYERS MASUK KE ELSE');
           if (payload.players.length === 1) {
-            console.log(payload.player, 'INI PAYLOAD.PLAYER DI LENGTH === 1');
-            console.log(payload.players, 'INI MASUK KE PLAYER REMAINING === 1');
-            let index = payload.players.indexOf(payload.player)
-            console.log(index, 'INI INDEX PAYLOAD.PLAYER === 1');
             setPlayerTurn(payload.player)
             let result = []
-            console.log(result, 'SLICE DI SOCKETON === 1');
             setPlayerRemaining(result)
           } else {
-            console.log(payload.player, 'INI PAYLOAD.PLAYER DI LENGTH !== 1');
-            console.log(payload.players, 'INI MASUK KE PLAYER REMAINING !== 1');
             setPlayerTurn(payload.player)
-            let index = payload.players.indexOf(payload.player)
             let result = [...payload.players.slice(0, payload.index), ...payload.players.slice(payload.index + 1)]
-            console.log(payload.index, 'INI INDEX PAYLOAD.PLAYER !== 1');
-            console.log(result, 'SLICE DI SOCKETON !== 1');
             setPlayerRemaining(result)
           }
         }
@@ -217,15 +205,11 @@ export default function Play() {
   }
 
   const shuffleUserTurn = () => {
-    console.log(playerRemaining, 'INI AWAL PLAYER REMAINIG');
     let randomPlayer = playerRemaining[Math.floor(Math.random() * playerRemaining.length)]
     let index = playerRemaining.indexOf(randomPlayer)
     let result;
     if (playerRemaining.length > 1) {
       // result = [...playerRemaining.slice(0, index), ...playerRemaining.slice(index + 1)]
-      // console.log(playerRemaining, 'INI PLAYERREMANING LENGTH > 1');
-      // console.log(result, 'INI RESULT LENGTH > 1');
-      console.log(playerRemaining);
       socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
     } else {
       console.log(playerRemaining, 'INI LENGTH < 1');
