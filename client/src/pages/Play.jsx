@@ -117,8 +117,7 @@ export default function Play() {
 
       // Broadcast random question
       socket.on('get-random-question', (payload) => {
-        setQuestions(payload.questions)
-        setQuestion(payload.question)
+        shuffleCardAnimation(payload.question, payload.questions)
         setIsShufflingCard(false)
         setRandomTurnButton(true)
       })
@@ -131,7 +130,6 @@ export default function Play() {
 
       socket.on('get-random-player', (payload) => {
         if (payload.players.length === 0) {
-          console.log(initiatePlayersRef.current);
           setPlayerRemaining(initiatePlayersRef.current)
           setIsShufflingCard(true)
           setQuestion({question: 'Shuffle Next Question'})
@@ -139,13 +137,12 @@ export default function Play() {
           setIsRandomTurnPlayer(false)
         } else {
           setIsRandomTurnPlayer(true)
-          console.log(payload.players, 'INI PAYLOAD.PLAYERS MASUK KE ELSE');
           if (payload.players.length === 1) {
             setPlayerTurn(payload.player)
             let result = []
             setPlayerRemaining(result)
           } else {
-            setPlayerTurn(payload.player)
+            shufflePlayerAnimation(payload.player, payload.players)
             let result = [...payload.players.slice(0, payload.index), ...payload.players.slice(payload.index + 1)]
             setPlayerRemaining(result)
           }
@@ -153,6 +150,7 @@ export default function Play() {
       })
   }, [])
 
+  console.log(questions, "INI COBA")
   const createPeer = (userToSignal, callerID, stream) => {
     const peer = new Peer({
       initiator: true,
@@ -207,18 +205,46 @@ export default function Play() {
     socket.emit('shuffle-card', {name, question: randomQuestion, questions: result, index})
   }
 
+  const shuffleCardAnimation = (question, questions) => {
+    let i = 0;
+    const mulai = new Date().getTime();
+
+    setInterval(function () {
+      if (new Date().getTime() - mulai > 2180) {
+        return;
+      }
+      setQuestion(questions[Math.round(Math.random() * (questions.length - 1))])
+    }, 5);
+
+    setTimeout(function () {
+      setQuestion(question)
+    }, 2180)
+  }
+
+  const shufflePlayerAnimation = (player, players) => {
+    const mulai = new Date().getTime();
+
+    setInterval(function () {
+      if (new Date().getTime() - mulai > 2000) {
+        return;
+      }
+      setPlayerTurn(players[Math.round(Math.random() * (players.length - 1))])
+    }, 100);
+    setTimeout(function () {
+      setPlayerTurn(player)
+    }, 2000)
+  }
+
   const shuffleUserTurn = () => {
     let randomPlayer = playerRemaining[Math.floor(Math.random() * playerRemaining.length)]
     let index = playerRemaining.indexOf(randomPlayer)
-    let result;
+
     if (playerRemaining.length > 1) {
-      // result = [...playerRemaining.slice(0, index), ...playerRemaining.slice(index + 1)]
       socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
     } else {
       console.log(playerRemaining, 'INI LENGTH < 1');
       socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
     }
-
   }
 
   return (
