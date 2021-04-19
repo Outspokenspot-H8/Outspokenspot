@@ -4,6 +4,7 @@ import OutspokenspotCard from '../assets/outspokenspot-cards.png'
 import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { socket } from '../connections/socketio'
+import Swal from 'sweetalert2'
 
 export default function LoginRegister() {
   const [slide, setSlide] = useState('login')
@@ -37,7 +38,11 @@ export default function LoginRegister() {
         history.push('/lobby')
       })
       .catch(err => {
-        console.log(err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: err.response.data.message,
+        })
       })
   }
 
@@ -60,8 +65,15 @@ export default function LoginRegister() {
       // Swal success
       handleSlideLogIn()
     })
-    .catch(err => {
-      console.log(err);
+    .catch(error => {
+     error.response.data.errors.map(err => {
+        console.log(err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: err
+        })
+      });
     })
   }
 

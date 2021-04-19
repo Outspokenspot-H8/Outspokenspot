@@ -265,6 +265,7 @@ export default function Play() {
             :
             <></>
           }
+          
           <div class="d-flex flex-row">
             {
               isStart ?
