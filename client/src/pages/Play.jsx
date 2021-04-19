@@ -51,6 +51,7 @@ export default function Play() {
   const [isShufflingCard, setIsShufflingCard] = useState(true)
   const [randomTurnButton, setRandomTurnButton] = useState(false)
   const [isRandomTurnPlayer, setIsRandomTurnPlayer] = useState(false)
+  const [shuffleDone, setShuffleDone] = useState(false)
   const { name } = useParams()
 
   useEffect(() => {
@@ -222,6 +223,7 @@ export default function Play() {
   }
 
   const shufflePlayerAnimation = (player, players) => {
+    setShuffleDone(false)
     const mulai = new Date().getTime();
 
     setInterval(function () {
@@ -232,6 +234,7 @@ export default function Play() {
     }, 100);
     setTimeout(function () {
       setPlayerTurn(player)
+      setShuffleDone(true)
     }, 2000)
   }
 
@@ -305,12 +308,12 @@ export default function Play() {
                   <></>
                 }
                 {
-                  randomTurnButton && localStorage.username === playerTurn.username ?
+                  randomTurnButton && localStorage.username === playerTurn.username && shuffleDone ?
                   <div className="d-flex justify-content-center">
                     <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
                   </div>
                   :
-                  !isShufflingCard ? 
+                  !isShufflingCard && shuffleDone ? 
                   <div className="d-flex justify-content-center">
                     <p>Waiting player to click Turn button...</p>
                   </div>
