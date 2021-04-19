@@ -54,7 +54,7 @@ export default function LobbyCard({room}) {
     <div className="d-flex flex-row m-3 card" style={{width: "20rem", height: "15rem"}}>
       <div className="flex-fill d-flex flex-column align-items-center justify-content-center" id="content">
         <span>ADMIN</span>
-        <img className="my-2" src={ava} alt="Card image cap" />
+        <img className="my-2 p-2 border rounded-3" src={ava} alt="Card image cap" style={{width: "100px"}} />
         <span>{room.admin}</span>
         <button onClick={() => handleJoin()} className="btn btn-outline-warning my-2">Join</button>
       </div>
