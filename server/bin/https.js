@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
   
   socket.on('fetch-room-detail', (name) => {
     let roomIndex = rooms.findIndex((room) => room.name === name )
-    io.sockets.to(name).emit('fetched-room-detail', rooms[roomIndex])
+    io.sockets.in(name).emit('fetched-room-detail', rooms[roomIndex])
   })
 
   socket.on('join-play', (name) => {
@@ -83,7 +83,11 @@ io.on('connection', (socket) => {
     io.sockets.in(payload.name).emit('get-random-question', {question: payload.question, questions: payload.questions, index: payload.index})
   })
 
-  socket.on('start-game', (payload) => {
+  socket.on('shuffle-user-turn', (payload) => {
+    io.sockets.in(payload.name).emit('get-random-player', {player: payload.player, players: payload.players, index: payload.index})
+  })
+
+  socket.on('start-gameplay', (payload) => {
     io.sockets.in(payload.name).emit('get-random-questions', payload.questions)
   })
   

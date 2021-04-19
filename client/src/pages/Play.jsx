@@ -40,15 +40,26 @@ export default function Play() {
   const socketRef = useRef()
   const userVideo = useRef()
   const peersRef = useRef([])
-  const { name } = useParams()
   const [questions, setQuestions] = useState([])
   const [question, setQuestion] = useState({})
   const [isStart, setIsStart] = useState(false)
+  // const [initiatePlayers, setInitiatePlayers] = useState([])
+  const initiatePlayersRef = useRef([])
+  const [playerRemaining, setPlayerRemaining] = useState([])
+  const [playerTurn, setPlayerTurn] = useState({})
+  const [isShufflingCard, setIsShufflingCard] = useState(true)
+  const [randomTurnButton, setRandomTurnButton] = useState(false)
+  const [isRandomTurnPlayer, setIsRandomTurnPlayer] = useState(false)
+  const { name } = useParams()
 
   useEffect(() => {
     socket.emit('get-room-detail', name)
     socket.on('got-room-detail', (roomDetail) => {
+      console.log(roomDetail);
+      console.log(roomDetail.users, 'Ini room detail users');
       setRoom(roomDetail)
+      setPlayerRemaining(roomDetail.users)
+      initiatePlayersRef.current = roomDetail.users
     })
     socketRef.current = socket
     navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true})
@@ -106,12 +117,49 @@ export default function Play() {
       socket.on('get-random-question', (payload) => {
         setQuestions(payload.questions)
         setQuestion(payload.question)
+        setIsShufflingCard(false)
+        setRandomTurnButton(true)
       })
 
       // Start game, bawa questions
       socket.on('get-random-questions', (questions) => {
         setQuestions(questions)
         setIsStart(true)
+      })
+
+      socket.on('get-random-player', (payload) => {
+        console.log(payload.players, 'INI PLAYERS YG MASUK DI SOCKETON');
+        if (payload.players.length === 0) {
+          console.log(payload.players, 'MASUK KE 0 PLAYER');
+          console.log(initiatePlayersRef.current);
+          setPlayerRemaining(initiatePlayersRef.current)
+          setIsShufflingCard(true)
+          setQuestion({question: 'Shuffle next question'})
+          setRandomTurnButton(false)
+          setIsRandomTurnPlayer(false)
+        } else {
+          setIsRandomTurnPlayer(true)
+          console.log(payload.players, 'INI PAYLOAD.PLAYERS MASUK KE ELSE');
+          if (payload.players.length === 1) {
+            console.log(payload.player, 'INI PAYLOAD.PLAYER DI LENGTH === 1');
+            console.log(payload.players, 'INI MASUK KE PLAYER REMAINING === 1');
+            let index = payload.players.indexOf(payload.player)
+            console.log(index, 'INI INDEX PAYLOAD.PLAYER === 1');
+            setPlayerTurn(payload.player)
+            let result = []
+            console.log(result, 'SLICE DI SOCKETON === 1');
+            setPlayerRemaining(result)
+          } else {
+            console.log(payload.player, 'INI PAYLOAD.PLAYER DI LENGTH !== 1');
+            console.log(payload.players, 'INI MASUK KE PLAYER REMAINING !== 1');
+            setPlayerTurn(payload.player)
+            let index = payload.players.indexOf(payload.player)
+            let result = [...payload.players.slice(0, payload.index), ...payload.players.slice(payload.index + 1)]
+            console.log(payload.index, 'INI INDEX PAYLOAD.PLAYER !== 1');
+            console.log(result, 'SLICE DI SOCKETON !== 1');
+            setPlayerRemaining(result)
+          }
+        }
       })
   }, [])
 
@@ -154,19 +202,37 @@ export default function Play() {
       }
     })
     .then(({data})=>{
-      socket.emit('start-game', {name, questions: data})
+      socket.emit('start-gameplay', {name, questions: data})
     })
     .catch(err => {
       console.log(err);
     })
   }
 
-  const shuffleCard = () =>{
-    let random = questions[Math.floor(Math.random() * questions.length)]
-    let index = questions.indexOf(random)
+  const shuffleCard = () => {
+    let randomQuestion = questions[Math.floor(Math.random() * questions.length)]
+    let index = questions.indexOf(randomQuestion)
     let result = [...questions.slice(0, index), ...questions.slice(index + 1)]
 
-    socket.emit('shuffle-card', {name, question: random, questions: result, index})
+    socket.emit('shuffle-card', {name, question: randomQuestion, questions: result, index})
+  }
+
+  const shuffleUserTurn = () => {
+    console.log(playerRemaining, 'INI AWAL PLAYER REMAINIG');
+    let randomPlayer = playerRemaining[Math.floor(Math.random() * playerRemaining.length)]
+    let index = playerRemaining.indexOf(randomPlayer)
+    let result;
+    if (playerRemaining.length > 1) {
+      // result = [...playerRemaining.slice(0, index), ...playerRemaining.slice(index + 1)]
+      // console.log(playerRemaining, 'INI PLAYERREMANING LENGTH > 1');
+      // console.log(result, 'INI RESULT LENGTH > 1');
+      console.log(playerRemaining);
+      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
+    } else {
+      console.log(playerRemaining, 'INI LENGTH < 1');
+      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
+    }
+
   }
 
   return (
@@ -200,21 +266,33 @@ export default function Play() {
             <h1 id="question-text">{question ? question.question : 'Click Shuffle Card To Play'}</h1>
             <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
           </div>
-          <h2>Username</h2>
+          {
+            isRandomTurnPlayer && !isShufflingCard ?
+            <h2>{playerTurn?.username}</h2>
+            :
+            <></>
+          }
           <div class="d-flex flex-row">
             {
               isStart ?
               <div>
-                <button class="btn btn-secondary my-1 mx-2"
-                onClick={()=> shuffleCard()}>Shuffle Card</button> 
-                <button class="btn btn-secondary my-1 mx-2">Turn</button>
+                {
+                  isShufflingCard ?
+                  <button onClick={()=> shuffleCard()} class="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+                  :
+                  <></>
+                }
+                {
+                  randomTurnButton ?
+                  <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                  :
+                  <></>
+                }
               </div>
               :
               <button class="btn btn-secondary my-1 mx-2"
-              onClick={()=> getCard()}>Start Game</button> 
+              onClick={()=> getCard()}>Start Game</button>
             }
-            <button class="btn btn-secondary my-1 mx-2">Shuffle Card</button>
-            <button class="btn btn-secondary my-1 mx-2">Turn</button>
           </div>
         </div>
       </div>
