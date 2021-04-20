@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node ./bin/https.js",
     "db:create:test": "npx sequelize db:create --env test",
     "db:migrate:test": "sequelize db:migrate --env test",
     "db:seed:all:test": "sequelize db:seed:all --env test",
