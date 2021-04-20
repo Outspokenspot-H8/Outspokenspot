@@ -28,6 +28,7 @@ io.on('connection', (socket) => {
       admin: payload.admin,
       isStarted: false,
       chats: [],
+      queQuantity: payload.queQuantity,
     }
     const filtered = rooms.filter(roomExist => roomExist.name === room.name)
     if(filtered.length !== 0){

@@ -10,7 +10,7 @@ export default function SideBar() {
       input: 'text',
       confirmButtonText: 'Next &rarr;',
       showCancelButton: true,
-      progressSteps: ['1', '2', '3'],
+      progressSteps: ['1', '2', '3', '4'],
       customClass: 'stepSwalCustom'
     }).queue([
       {
@@ -22,12 +22,19 @@ export default function SideBar() {
         text: 'Maximum players in your Room',
         input: 'select',
         inputOptions: {1:1, 2:2, 3:3, 4:4} 
+      },
+      {
+        title: "Question's Quantity",
+        text: 'Maximum questions in Game',
+        input: 'select',
+        inputOptions: {10:10, 20:20, 30:30, 40:40} 
       }
     ]).then((result) => {
       if (result.value) {
         let payload = {
           'room-name': result.value[0],
           max: Number(result.value[1]),
+          queQuantity: Number(result.value[2]),
           admin: localStorage.username,
         }
         socket.emit('create-room', payload)

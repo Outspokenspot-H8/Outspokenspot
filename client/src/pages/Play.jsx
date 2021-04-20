@@ -66,6 +66,7 @@ export default function Play() {
   const [turnFlipCard, setTurnFlipCard] = useState('')
   const player = useRef('')
   const questionLength = useRef([])
+  const detail = useRef({})
 
   useEffect(() => {
     if(messages.length !== 0){
@@ -80,6 +81,7 @@ export default function Play() {
       setPlayerRemaining(roomDetail.users)
       initiatePlayersRef.current = roomDetail.users
       initiateAdmin.current = roomDetail.admin
+      detail.current = roomDetail
     })
     socketRef.current = socket
     navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true})
@@ -232,7 +234,7 @@ export default function Play() {
       }
     })
     .then(({data})=>{
-      const filterAndRandomData = _.sampleSize(data, 3);
+      const filterAndRandomData = _.sampleSize(data, detail.current.queQuantity);
       const cover = {
         question: "Your Admin must click the Question Card to Initiate The Game"
       };
@@ -315,11 +317,11 @@ export default function Play() {
   }
 
   const swap = (questionRemaining) => {
-    if(questionRemaining.length === questionLength.current.length){
-      setPlayerTurn(initiateAdmin.current)
-    }
     setRandomTurnButton(true)
     setTurnFlipCard('')
+    if(questionRemaining.length === questionLength.current.length){
+      setTurnFlipCard(initiateAdmin.current)
+    }
     if(questionRemaining.length === 1) {
       setRandomTurnButton(false)
       setShuffleDone(false)
@@ -400,17 +402,26 @@ export default function Play() {
               isStart ?
               <div>
                 {
-                  randomTurnButton && localStorage.username === playerTurn.username ?
+                  randomTurnButton && !playerTurn.username ?
                   <div className="d-flex justify-content-center">
-                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} className="btn btn-secondary btn-lg my-1 mx-2">Turn</button>
                   </div>
                   :
-                   shuffleDone ? 
+                  <></> 
+                }
+                {
+                  randomTurnButton && localStorage.username === playerTurn.username && shuffleDone ?
+                  <div className="d-flex justify-content-center">
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} class="btn btn-secondary btn-lg my-1 mx-2">Turn</button>
+                  </div>
+                  : questions.length === 0 ?
+                    <> </>
+                  : shuffleDone ?
                   <div className="d-flex justify-content-center">
                     <p style={{color: "#FFEF00"}}>Waiting player to click Turn button...</p>
                   </div>
                   :
-                  <></>
+                   <> </>
                 }
               </div>
               :
