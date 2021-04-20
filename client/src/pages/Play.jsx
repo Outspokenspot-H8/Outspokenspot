@@ -206,7 +206,7 @@ export default function Play() {
   const getCard = () => {
     axios({
       method:'GET',
-      url:'http://localhost:4000/questions',
+      url:'https://outspokenspot-h8.herokuapp.com/questions',
       headers:{
         access_token: localStorage.getItem('access_token')
       }

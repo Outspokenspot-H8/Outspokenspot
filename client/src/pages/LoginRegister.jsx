@@ -23,7 +23,7 @@ export default function LoginRegister() {
   const login = () => {
     axios({
       method: "POST",
-      url: 'http://localhost:4000/login',
+      url: 'https://outspokenspot-h8.herokuapp.com/login',
       data: {
         email: dataLogin.email,
         password: dataLogin.password
@@ -56,7 +56,7 @@ export default function LoginRegister() {
 
   const register = () => {
 
-    axios.post('http://localhost:4000/register', {
+    axios.post('https://outspokenspot-h8.herokuapp.com/register', {
       username: newUser.username,
       email: newUser.email,
       password: newUser.password,
