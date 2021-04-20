@@ -16,9 +16,7 @@ let rooms = []
 
 io.on('connection', (socket) => {
   socket.on('login', (data) => {
-    const filtered = rooms.filter(room => {
-      return room.isStarted === false
-    })
+    const filtered = rooms.filter(room => room.isStarted === false)
     socket.emit('get-rooms', filtered)
   })
 
@@ -148,8 +146,10 @@ io.on('connection', (socket) => {
   })
 })
 
-server.listen(port, () => {
-    console.log(`Outspokenspotapp listening on port: ${port}`)
-})
+if (process.env.NODE_ENV !== "test") {
+  server.listen(port, () => {
+      console.log(`Outspokenspotapp listening on port: ${port}`)
+  })
+}
 
-// module.exports = server
+module.exports = io

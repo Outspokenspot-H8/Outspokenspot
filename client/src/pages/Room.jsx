@@ -9,12 +9,14 @@ import { useHistory } from 'react-router-dom'
 export default function Room() {
   const [room, setRoom] = useState({})
   const [user, setUser] = useState('')
+  const [ava, setAva]  = useState('')
   const { name } = useParams()
   const history = useHistory()
 
   useEffect(() => {
     socket.on('room-detail', (roomDetail) => {
       setRoom(roomDetail)
+      setAva(`https://avatars.dicebear.com/api/bottts/${roomDetail.admin}.svg`)
     })
     setUser(localStorage.username)
 
@@ -44,7 +46,7 @@ export default function Room() {
               <h3 class="banner-title">{room.name?.toUpperCase()}</h3>
               <div class="d-flex flex-row m-3 card" style={{width: "20rem"}}>
                 <div class="flex-fill d-flex flex-column align-items-center justify-content-center">
-                  <img class="my-3" src={Avatar} alt="Card image cap" />
+                  <img class="my-3 border rounded-3" src={ava} alt="Card image cap" style={{width: "120px"}}/>
                   <h4>Admin</h4>
                 </div>
                 <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center">
