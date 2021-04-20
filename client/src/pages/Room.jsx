@@ -10,13 +10,14 @@ import axios from 'axios'
 export default function Room() {
   const [room, setRoom] = useState({})
   const [user, setUser] = useState('')
-  const [avatar,setAvatar] = useState()
+  const [ava, setAva]  = useState('')
   const { name } = useParams()
   const history = useHistory()
 
   useEffect(() => {
     socket.on('room-detail', (roomDetail) => {
       setRoom(roomDetail)
+      setAva(`https://avatars.dicebear.com/api/bottts/${roomDetail.admin}.svg`)
     })
     setUser(localStorage.username)
 
@@ -25,7 +26,7 @@ export default function Room() {
       setRoom(roomDetail)
     })
     setUser(localStorage.username)
-
+    
     socket.on('started-game', (data) => {
       history.push(`/play/${data}`)
     })
@@ -56,8 +57,8 @@ export default function Room() {
   
 
   const handleStartGame = () => {
-    socket.emit('start-game', room.name)
     history.push(`/play/${room.name}`)
+    socket.emit('start-game', room.name)
   }
 
   return (
@@ -66,11 +67,11 @@ export default function Room() {
         <div class="banner">
           <div class="d-flex flex-row all-content">
             <div class="box-admin">
-              <h1 class="banner-title">Room Name: {room.name}</h1>
-
+              <h1 class="banner-title">Room Name:</h1>
+              <h3 class="banner-title">{room.name?.toUpperCase()}</h3>
               <div class="d-flex flex-row m-3 card" style={{width: "20rem"}}>
                 <div class="flex-fill d-flex flex-column align-items-center justify-content-center">
-                  <img class="my-3" src={avatar} alt="Card image cap" />
+                  <img class="my-3 border rounded-3" src={ava} alt="Card image cap" style={{width: "120px"}}/>
                   <h4>Admin</h4>
                 </div>
                 <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center">
@@ -81,7 +82,7 @@ export default function Room() {
               {
                 room.admin === user ?
                 <div className="d-flex justify-content-center my-3">
-                  <button onClick={() => handleStartGame()} type="button" className="btn btn-danger" id="logout">Start</button>
+                  <button onClick={() => handleStartGame()} type="button" className="btn-lg btn-danger" id="logout">Start</button>
                 </div>
                 :
                 <div class="d-flex flex-row mx-3 p-2 card" style={{width: "20rem"}}>
@@ -93,8 +94,6 @@ export default function Room() {
                   </div>
                 </div>
               }
-
-
             </div>
 
             <div class="box-user">

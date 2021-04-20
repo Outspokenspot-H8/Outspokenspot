@@ -16,21 +16,18 @@ export default function Lobby() {
     localStorage.removeItem('id')
     localStorage.removeItem('username')
     localStorage.removeItem('location')
-    history.push('/')
   }
 
   const handleOnChange = (e) => {
     setRoomName(e.target.value)
   }
 
-  const handleCreateRoom = () => {
-    let payload = {
-      'room-name': roomName,
-      admin: localStorage.username,
-    }
-    socket.emit('create-room', payload)
-    setRoomName('')
-  }
+  useEffect (() => {
+    navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+      .then(()=> {
+        console.log("permission")
+      })
+  }, [])
 
   useEffect(() => {
     socket.on('get-rooms', (roomsServer) => {
@@ -45,32 +42,44 @@ export default function Lobby() {
     })
   }, [rooms])
 
+  if (rooms.length === 0){
+    return (
+      <div>
+      <SideBar />
+        <main>
+          <div className="d-flex justify-content-end mx-4">
+            <a onClick={handleLogout} href="/" type="button" className="btn btn-danger mt-4" id="logout">LOG OUT</a>
+          </div>
+          <div className="banner-lobby" style={{height: "90vh"}}>
+            <h1 className="my-4" style={{color: "#FFEF00"}}>Outspoken Room</h1>
+            <div className="row justify-content-center" style={{height: "60vh", width: "60vh"}} id="loading-image">
+            </div>
+            <h3 className="my-4" style={{color: "#FFEF00"}}>Room is Unavailable</h3>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div>
       <SideBar />
       <main>
         <div className="d-flex justify-content-end mx-4">
-          <button onClick={() => handleLogout()} type="button" className="btn btn-danger mt-4" id="logout">LOG OUT</button>
+          <a onClick={handleLogout} href="/" type="button" className="btn btn-danger mt-4" id="logout">LOG OUT</a>
         </div>
         <div className="banner-lobby">
           <h1 className="mt-4" style={{color: "#FFEF00"}}>Outspoken Room</h1>
-          <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Create Room</label>
-            <input onChange={handleOnChange} value={roomName} type="text" class="form-control" id="exampleFormControlInput1" placeholder="Room Name" />
-          </div>
-          <div className="d-flex justify-content-end mx-4">
-            <button onClick={() => handleCreateRoom()} type="button" className="btn btn-danger" id="logout">Submit</button>
-          </div>
           <div className="row justify-content-center">
-
             {
+              rooms?.length === 0 ?
+              <></>
+              :
               rooms?.map((room, i) => {
-                return <LobbyCard room={room} key={i}/>
+                return <LobbyCard room={room} key={i} idx={i}/>
               })
             }
-
           </div>
-          
         </div>
       </main>
     </div>
