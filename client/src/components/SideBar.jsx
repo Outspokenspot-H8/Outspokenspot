@@ -9,14 +9,16 @@ export default function SideBar() {
       </div>
       <div className="about-us">
         <div className="about-us-content">
-            <h3>How to Play & the Rules:</h3>
+            <h3>Peraturan & Cara bermain:</h3>
             <ol>
-                <li>Find someone to play with, could be your family, friend, or your significant other.</li>
-                <li>It's okay if you don't have one. You could ask yourself anyway.</li>
-                <li>Shuffle the outspokenspot cards by click the Pick Random Card button.</li>
-                <li>Once it stops, answer the questions on the card.</li>
-                <li>Make sure you answer the question outspokenly.</li>
-                <li>You could do this over and over and you won't get same question at one go.</li>
+                <li>Cari teman bermain, bisa sahabat, keluarga atau partner anda.</li>  
+                <li>Jika kamu tidak punya teman, kamu juga bisa bermain sendiri.</li>
+                <li>Buat Room baru dengan memasukan nama room dan tekan submit.</li>
+                <li>Pilih berapa banyak orang dalam satu room atau kamu juga bisa masuk ke dalam Room orang lain dengan menekan tombol 'join'.</li>
+                <li>Jika pemain sudah berkumpul, pembuat room dapat menekan tombol 'start' untuk memulai permainan.</li>
+                <li>Tekan tombol 'start game' untuk memulai permainan.</li>
+                <li>Tekan shuffle card untuk mengeluarkan random pertanyaan, dan turn untuk mendapatkan giliran menjawab.</li>
+                <li>Jawab dengan jujur setiap pertanyaan dan dapatkan percakapan mendalam dengan partnermu.</li>
             </ol>
             {/* <nav id="nav">
               <button type="button" className="btn btn-outline-warning btn-lg mx-1 mb-5">Create Room</button>

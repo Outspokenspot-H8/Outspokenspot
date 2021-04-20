@@ -5,10 +5,12 @@ import RoomCard from '../components/RoomCard'
 import { socket } from '../connections/socketio'
 import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
+import axios from 'axios'
 
 export default function Room() {
   const [room, setRoom] = useState({})
   const [user, setUser] = useState('')
+  const [avatar,setAvatar] = useState()
   const { name } = useParams()
   const history = useHistory()
 
@@ -27,7 +29,31 @@ export default function Room() {
     socket.on('started-game', (data) => {
       history.push(`/play/${data}`)
     })
-  }, [])
+    // randomAvatar()
+
+    // axios.get('https://joeschmoe.io/api/v1/random')
+    axios.get('https://gravatar.com/avatar/f0487842e5a3008e97974a52fe0b1776?s=400&d=robohash&r=x')
+    .then(({data})=>{
+      console.log(data,'<<<<<<<<<')
+      setAvatar(data)
+    })
+    .catch(console.log)
+  }, [avatar])
+
+  const randomAvatar = () => {
+    console.log('ini di avatar')
+    axios.get('https://joeschmoe.io/api/v1/random')
+      .then(({data})=>{
+        console.log(data,'<<<<<<<<<')
+        setAvatar(data)
+      })
+      .catch(console.log)
+  }
+
+  // if(avatar){
+  //   console.log(avatar,'<<>>')
+  // }
+  
 
   const handleStartGame = () => {
     socket.emit('start-game', room.name)
@@ -44,7 +70,7 @@ export default function Room() {
 
               <div class="d-flex flex-row m-3 card" style={{width: "20rem"}}>
                 <div class="flex-fill d-flex flex-column align-items-center justify-content-center">
-                  <img class="my-3" src={Avatar} alt="Card image cap" />
+                  <img class="my-3" src={avatar} alt="Card image cap" />
                   <h4>Admin</h4>
                 </div>
                 <div class="flex-fill d-flex justify-content-center align-items-center flex-column text-center">
