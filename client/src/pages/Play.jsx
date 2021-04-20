@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import BlankCard from '../assets/blank-cards-3.png'
+import BlankCardBack from '../assets/blank-cards-outspokenspot-2.png'
+import PressStart from '../assets/press-start.gif'
 import { useParams } from 'react-router-dom'
 import { socket } from '../connections/socketio'
 import PlayerCard from '../components/PlayerCard'
@@ -296,17 +298,27 @@ export default function Play() {
 
         <div id="div-card" style={{zIndex: "5"}}>
           <div className="d-flex text-center justify-content-center align-items-center">
-            <h1 id="question-text">{question ? question.question : 'Click Shuffle Card To Play'}</h1>
+            <h1 id="question-text">
+              {
+                isStart?
+                question?.question ?
+                question.question
+                :
+                'Click Shuffle Card To Play'
+                :
+                <></>
+              }
+            </h1>
             {
               isStart ?  
               <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
               :
-              <img src="https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/bonuses/flip-card/assets/back.png" style={{marginLeft: "10px", marginTop: "15px", width: "250px", height: "350px"}} alt="outspoketspot-cards" />
+              <img src={PressStart} className="my-5" style={{width: "250px"}} alt="outspoketspot-cards" />
             }
           </div>
           {
             isRandomTurnPlayer && !isShufflingCard ?
-            <h2>{playerTurn?.username}</h2>
+            <h2 style={{color: "#FFEF00"}}>{playerTurn?.username}</h2>
             :
             <></>
           }
