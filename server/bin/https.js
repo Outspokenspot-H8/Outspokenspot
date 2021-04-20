@@ -29,6 +29,7 @@ io.on('connection', (socket) => {
       max: payload.max,
       admin: payload.admin,
       isStarted: false,
+      chats: [],
     }
     const filtered = rooms.filter(roomExist => roomExist.name === room.name)
     if(filtered.length !== 0){
@@ -88,6 +89,16 @@ io.on('connection', (socket) => {
     }
     
     socket.emit('other-users', otherUsers)
+  })
+
+  socket.on('send-message', ({name, player, message}) => {
+    let roomIndex = rooms.findIndex((room) => room.name === name )
+    let messagePlayer = {
+      player,
+      message
+    }
+    rooms[roomIndex].chats.push(messagePlayer)
+    io.sockets.in(name).emit('fetch-all-message', rooms[roomIndex].chats)
   })
 
   socket.on('sending-signal', (payload) => {

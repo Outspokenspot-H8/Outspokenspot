@@ -188,6 +188,63 @@ div.banner-content img {
   left: 41%;
 }
 
+.card-1 {
+  animation: slideToTopLeft 2s ease forwards;
+}
+@keyframes slideToTopLeft{
+  0%{
+      opacity: 0;
+      transform: translate3d(30%, 30%, 0);
+  }
+  100%{
+      opacity: 1;
+      transform: translateY(0%);
+  }
+}
+
+.card-2 {
+  animation: slideToBottomLeft 2s ease forwards;
+}
+@keyframes slideToBottomLeft{
+  0%{
+    opacity: 0;
+    transform: translate3d(30%, -30%, 0);
+  }
+  100%{
+    opacity: 1;
+      transform: translateY(0%);
+  }
+}
+
+.card-3 {
+  animation: slideToTopRight 2s ease forwards;
+}
+@keyframes slideToTopRight{
+  0%{ 
+    opacity: 0;
+      transform: translate3d(-30%, 30%, 0);
+  }
+  100%{
+    opacity: 1;
+      transform: translateY(0%);
+  }
+}
+
+.card-4 {
+  animation: slideToBottomRight 2s ease forwards;
+}
+@keyframes slideToBottomRight{
+  0%{
+    opacity: 0;
+      transform: translate3d(-30%, -30%, 0);
+  }
+  100%{
+    opacity: 1;
+      transform: translateY(0%);
+  }
+}
+
+
 div.banner-content p {
     padding-bottom: 30px;
     padding-top: 15px;
@@ -318,7 +375,6 @@ div.footer-content img {
 .cf {
     *zoom: 1;
 } */
-* {box-sizing: border-box;}
 
 /* Button used to open the chat form - fixed at the bottom of the page */
 .open-button {
@@ -337,9 +393,7 @@ div.footer-content img {
   width: 200px;
 }
 
-/* The popup chat - hidden by default */
 .chat-popup {
-  display: none;
   position: absolute;
   bottom: 0;
   left: 0; 
@@ -349,10 +403,20 @@ div.footer-content img {
   width: 400px;
   border: 3px solid #f1f1f1;
   z-index: 9;
+  animation: fadeIn 0.8s ease forwards;
+}
+@keyframes fadeIn{
+  0%{
+      opacity: 0;
+  }
+  100%{
+      opacity: 1;
+  }
 }
 
 /* Add styles to the form container */
 .form-container {
+  max-height: 100%;
   max-width: 400px;
   padding: 10px;
   background-color: white;
@@ -385,4 +449,10 @@ div.footer-content img {
   height: 150px;
   display: flex;
   flex-direction: column-reverse;
+}
+
+#minimize {
+  position: absolute;
+  right: 0;
+  top: -20px;
 }
