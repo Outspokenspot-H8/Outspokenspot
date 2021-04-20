@@ -1,0 +1,37 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "db:create:test": "npx sequelize db:create --env test",
+    "db:migrate:test": "sequelize db:migrate --env test",
+    "db:seed:all:test": "sequelize db:seed:all --env test",
+    "db:create:development": "sequelize db:create --env development",
+    "db:migrate:development": "sequelize db:migrate --env development",
+    "db:seed:all:development": "sequelize db:seed:all --env development",
+    "test": "NODE_ENV=test npx jest --detectOpenHandles --forceExit --runInBand --coverage",
+    "dev": "NODE_ENV=development nodemon ./bin/https.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "pg": "^8.6.0",
+    "sequelize": "^6.6.2",
+    "socket.io": "^4.0.1",
+    "socket.io-client": "^4.0.1"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
+    "sequelize-cli": "^6.2.0",
+    "supertest": "^6.1.3"
+  }
+}
