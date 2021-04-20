@@ -1,4 +1,4 @@
-html, body, h1, h2, h3, h4, h5, h6, p, a, button {
+html, body, h1, h2, h3, h4, h5, h6, p, a, button, span {
     margin: 0;
     padding: 0;
     font-family: 'Chakra Petch', sans-serif !important;
@@ -183,6 +183,13 @@ ul {
     font-size: 20px;
     max-width: 200px;
     word-wrap: break-word;
+}
+
+#questionStack {
+  pointer-events: none;
+  font-size: 20px;
+  max-width: 200px;
+  word-wrap: break-word;
 }
 
 div.banner-content img {
@@ -480,8 +487,8 @@ div.footer-content img {
 }
 
 #minimize {
-  padding : 1px 10px!important;
-  margin-bottom: 5px;
+  height: 30px;
+  margin: 5px 0px;
 }
 
 #messagePlayer {
@@ -535,5 +542,85 @@ div.footer-content img {
   100%{
     opacity: 1;
       transform: translateX(0%);
+  }
+}
+
+#notif {
+  height: 30px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.questionStack {
+  cursor: pointer;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.stack {
+  width: 250px;
+  height: 350px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.stack.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.questionCard {
+  cursor: pointer;
+  background-color: white;
+  width: 100%;
+  min-height: 80%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  font-family: sans-serif;
+  font-size: 2rem;
+  color: black;
+  box-shadow: 0 5px 10px 0 #00000040, 0 15px 20px 0 #00000020;
+  transition: transform 200ms;
+}
+
+.questionCard:nth-last-child(n + 4) {
+  --y: calc(-50% - 30px);
+  transform: translate(-50%, var(--y)) scale(0.9);
+  box-shadow: 0 0 1px 1px #00000003;
+}
+
+.questionCard:nth-last-child(3) {
+  --y: calc(-50% - 15px);
+  transform: translate(-50%, var(--y)) scale(0.95);
+}
+
+.questionCard:nth-last-child(2) {
+  --y: calc(-50%);
+  transform: translate(-50%, var(--y)) scale(1);
+}
+
+.questionCard:nth-last-child(1) {
+  --y: calc(-50% + 15px);
+  transform: translate(-50%, var(--y)) scale(1.05);
+}
+
+@keyframes swap {
+  50% {
+    transform: translate(-50%, calc(var(--y) - 250px)) scale(0.85) rotate(-5deg);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: translate(-50%, calc(var(--y) - 15px)) scale(0.85);
+    z-index: -1;
   }
 }

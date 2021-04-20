@@ -6,6 +6,8 @@ import PlayerCard from '../components/PlayerCard'
 import Peer from 'simple-peer'
 import styled from 'styled-components'
 import axios from 'axios'
+import notif from '../assets/notif2.webp'
+import _ from 'lodash'
 
 const StyledVideo = styled.video`
   height: auto;
@@ -55,6 +57,14 @@ export default function Play() {
   const [isForm, setIsForm] = useState("close")
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState([])
+  const [isNotif, setIsNotif] = useState(false)
+  const [cards, setCards] = useState([1,2,3,4,5,6,7,8])
+
+  useEffect(() => {
+    if(messages.length !== 0){
+      setIsNotif(true)
+    }
+  }, [messages])
 
   useEffect(() => {
     socket.emit('get-room-detail', name)
@@ -120,7 +130,6 @@ export default function Play() {
 
       // Broadcast random question
       socket.on('get-random-question', (payload) => {
-        shuffleCardAnimation(payload.question, payload.questions)
         setIsShufflingCard(false)
         setRandomTurnButton(true)
       })
@@ -156,7 +165,14 @@ export default function Play() {
       socket.on('fetch-all-message', (payload) => {
         setMessages(payload)
       })
+
+      socket.on('swap-questions', (payload) => {
+        swap(payload)
+      })
   }, [])
+
+  useEffect(() => {
+  }, [cards])
 
   const createPeer = (userToSignal, callerID, stream) => {
     const peer = new Peer({
@@ -197,35 +213,36 @@ export default function Play() {
       }
     })
     .then(({data})=>{
-      socket.emit('start-gameplay', {name, questions: data})
+      const filterAndRandomData = _.sampleSize(data, 3);
+      socket.emit('start-gameplay', {name, questions: filterAndRandomData})
     })
     .catch(err => {
       console.log(err);
     })
   }
 
-  const shuffleCard = () => {
-    let randomQuestion = questions[Math.floor(Math.random() * questions.length)]
-    let index = questions.indexOf(randomQuestion)
-    let result = [...questions.slice(0, index), ...questions.slice(index + 1)]
-    socket.emit('shuffle-card', {name, question: randomQuestion, questions: result, index})
-  }
+  // const shuffleCard = () => {
+  //   let randomQuestion = questions[Math.floor(Math.random() * questions.length)]
+  //   let index = questions.indexOf(randomQuestion)
+  //   let result = [...questions.slice(0, index), ...questions.slice(index + 1)]
+  //   socket.emit('shuffle-card', {name, question: randomQuestion, questions: result, index})
+  // }
 
-  const shuffleCardAnimation = (question, questions) => {
-    let i = 0;
-    const mulai = new Date().getTime();
+  // const shuffleCardAnimation = (question, questions) => {
+  //   let i = 0;
+  //   const mulai = new Date().getTime();
 
-    setInterval(function () {
-      if (new Date().getTime() - mulai > 2180) {
-        return;
-      }
-      setQuestion(questions[Math.round(Math.random() * (questions.length - 1))])
-    }, 5);
+  //   setInterval(function () {
+  //     if (new Date().getTime() - mulai > 2180) {
+  //       return;
+  //     }
+  //     setQuestion(questions[Math.round(Math.random() * (questions.length - 1))])
+  //   }, 5);
 
-    setTimeout(function () {
-      setQuestion(question)
-    }, 2180)
-  }
+  //   setTimeout(function () {
+  //     setQuestion(question)
+  //   }, 2180)
+  // }
 
   const shufflePlayerAnimation = (player, players) => {
     const mulai = new Date().getTime();
@@ -248,12 +265,12 @@ export default function Play() {
     if (playerRemaining.length > 1) {
       socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
     } else {
-      console.log(playerRemaining, 'INI LENGTH < 1');
       socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
     }
   }
 
   const openChat = () => {
+    setIsNotif(false)
     setIsForm("open");
   }
 
@@ -262,9 +279,36 @@ export default function Play() {
   }
 
   const sendMessage = () => {
-    setMessage("")
     socket.emit('send-message', {name, player: localStorage.username, message})
+    setMessage("")
+    setIsNotif(false)
   }
+
+  const handleKeyPress = (e) => {
+    if(e.charCode === 13){
+      socket.emit('send-message', {name, player: localStorage.username, message})
+      setMessage("")
+      setIsNotif(false)
+    }
+  }
+
+  const swap = (questionRemaining) => {
+    let questionCard = document.querySelector('.questionCard:last-child');
+    questionCard.style.animation = "swap 700ms forwards";
+    setTimeout(() => {
+      questionCard.style.animation = "";
+      console.log(questionRemaining, "INI QUESTION SWAP")
+      questionRemaining.pop()
+      setQuestions([...questionRemaining])
+    }, 700);
+  }
+
+  const getSwap = (e) => {
+    let questionCard = document.querySelector('.questionCard:last-child');
+    if(e.target !== questionCard) return;
+    socket.emit('swap', {name, questions})
+  }
+
 
   return (
     <main>
@@ -281,7 +325,7 @@ export default function Play() {
         </div>
           {
             peers?.map((peer, idx) => {
-              return <PlayerCard key={peer.peerID} peer={peer} turn={playerTurn.username} idx={idx+2}/>;
+              return <PlayerCard key={peer.peerID} peer={peer} turn={playerTurn.username} idx={idx}/>;
             })
           }
         {/* {
@@ -293,10 +337,24 @@ export default function Play() {
         } */}
 
         <div id="div-card" style={{zIndex: "5"}}>
-          <div className="d-flex text-center justify-content-center align-items-center">
-            <h1 id="question-text">{question ? question.question : 'Click Shuffle Card To Play'}</h1>
-            <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
-          </div>
+          {
+            questions.length === 0 ?
+            <div className="d-flex text-center justify-content-center align-items-center">
+              <h1 id="question-text">Click Shuffle Card To Play</h1>
+              <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards"/>
+            </div>
+            :
+            <div class="questionStack">
+              <div class={isRandomTurnPlayer? "stack disabled" : "stack"} onClick={(e) => getSwap(e)}>
+                {
+                  questions.map(question => {
+                    return <div class="questionCard"><h1 id="questionStack">{question.question}</h1></div>
+                  }) 
+                }
+              </div>
+            </div>
+          }
+         
           {
             isRandomTurnPlayer && !isShufflingCard ?
             <h2>{playerTurn?.username}</h2>
@@ -307,12 +365,12 @@ export default function Play() {
             {
               isStart ?
               <div>
-                {
+                {/* {
                   isShufflingCard ?
                   <button onClick={()=> shuffleCard()} className="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
                   :
                   <></>
-                }
+                } */}
                 {
                   randomTurnButton ?
                   <button onClick={() => shuffleUserTurn()} className="btn btn-secondary my-1 mx-2">Turn</button>
@@ -326,13 +384,13 @@ export default function Play() {
             }
           </div>
         </div>
-        <button className="open-button" style={isForm == "open" ? {display: "none"}: {display: "inline-block"}} onClick={openChat}>Chat</button>
+        <button className="open-button" style={isForm == "open" ? {display: "none"}: {display: "inline-block"}} onClick={openChat}>CHAT{isNotif ? <img src={notif} alt="Notif" id="notif"></img> : ""}</button>
 
-        <div className={isForm === "open" ? "chat-popup" : "chat-popup close"} id="myForm">
-          <form className="form-container" onSubmit={(e) => e.preventDefault()}>
+        <div className={isForm === "open" ? "chat-popup rounded-top" : "chat-popup close rounded-top"} id="myForm">
+          <div className="form-container">
           <div className="d-flex flex-row justify-content-between">
           <h2>Chat</h2>
-          <button className="btn btn-outline-warning py-1" id="minimize" onclick="closeForm()" onClick={closeChat}>-</button>
+          <button className="btn btn-outline-warning py-1 " id="minimize" onClick={closeChat}>-</button>
           </div>
             <div className="box-body overflow-auto">
               {
@@ -343,7 +401,7 @@ export default function Play() {
                         <div>
                           <p className="m-0" style={{fontSize: "12px"}}>{message.player}</p>
                         </div>
-                        <div className="bg-danger w-50 rounded my-1 mx-2 text-center p-1">
+                        <div className="w-50 rounded my-1 mx-2 text-center p-1" style={{backgroundColor: "#FFEF00"}}>
                           <span style={{maxWidth: "50%", wordWrap: "break-word", fontSize: "13px"}}>{message.message}</span>
                         </div>
                       </div>
@@ -351,7 +409,7 @@ export default function Play() {
                   } else {
                     return (
                       <div className="d-flex flex-row justify-content-start align-items-center" style={{width: "100%"}} id="messageOther">
-                        <div className="bg-primary w-50 rounded my-1 mx-2 text-center p-1">
+                        <div className="w-50 rounded my-1 mx-2 text-center p-1" style={{backgroundColor: "#8E44AD"}}>
                           <span style={{maxWidth: "50%", wordWrap: "break-word", fontSize: "13px"}}>{message.message}</span>
                         </div>
                         <div>
@@ -365,13 +423,13 @@ export default function Play() {
             </div>
             <div className="row">
               <div className="col-8">
-                <input type="text" onChange={(e) => setMessage(e.target.value)} value={message} placeholder="Type message.." name="msg"/>
+                <input type="text" onChange={(e) => setMessage(e.target.value)} value={message} placeholder="Type message.." name="msg" onKeyPress={handleKeyPress}/>
               </div>
               <div className="col-4 align-items-center justify-content-center d-flex">
                 <button type="submit" className="btn btn-secondary" onClick={sendMessage}>Send</button>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </main>
