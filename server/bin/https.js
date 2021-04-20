@@ -120,6 +120,10 @@ io.on('connection', (socket) => {
   socket.on('start-gameplay', (payload) => {
     io.sockets.in(payload.name).emit('get-random-questions', payload.questions)
   })
+
+  socket.on('swap', (payload) => {
+    io.sockets.in(payload.name).emit('swap-questions', payload.questions)
+  })
   
   socket.on('disconnect', () => {
     let leavedRoom;
