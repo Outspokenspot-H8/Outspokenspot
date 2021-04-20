@@ -43,7 +43,6 @@ export default function LoginRegister() {
           title: 'Oops...',
           text: err.response.data.message,
         })
-        console.log(err);
       })
   }
 

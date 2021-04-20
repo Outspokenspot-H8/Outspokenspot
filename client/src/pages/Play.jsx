@@ -129,7 +129,9 @@ export default function Play() {
       // Start game, bawa questions
       socket.on('get-random-questions', (questions) => {
         setQuestions(questions)
+        console.log(isStart, "sebelum di start");
         setIsStart(true)
+        console.log(isStart, "setelah di start");
       })
 
       socket.on('get-random-player', (payload) => {
@@ -295,7 +297,12 @@ export default function Play() {
         <div id="div-card" style={{zIndex: "5"}}>
           <div className="d-flex text-center justify-content-center align-items-center">
             <h1 id="question-text">{question ? question.question : 'Click Shuffle Card To Play'}</h1>
-            <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
+            {
+              isStart ?  
+              <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards" />
+              :
+              <img src="https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/bonuses/flip-card/assets/back.png" style={{marginLeft: "10px", marginTop: "15px", width: "250px", height: "350px"}} alt="outspoketspot-cards" />
+            }
           </div>
           {
             isRandomTurnPlayer && !isShufflingCard ?
@@ -309,22 +316,24 @@ export default function Play() {
               <div>
                 {
                   isShufflingCard ?
-                  <button onClick={()=> shuffleCard()} className="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+                  <div>
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={()=> shuffleCard()} class="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+                  </div>
                   :
                   <></>
                 }
                 {
                   randomTurnButton && !playerTurn.username ?
                   <div className="d-flex justify-content-center">
-                    <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
                   </div>
                   :
-                  <></>
+                  <></> 
                 }
                 {
                   randomTurnButton && localStorage.username === playerTurn.username && shuffleDone ?
                   <div className="d-flex justify-content-center">
-                    <button onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
                   </div>
                   :
                   !isShufflingCard && shuffleDone ? 
@@ -336,7 +345,7 @@ export default function Play() {
                 }
               </div>
               :
-              <button className="btn btn-secondary my-1 mx-2"
+              <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} class="btn btn-secondary my-1 mx-2"
               onClick={()=> getCard()}>Start Game</button>
             }
           </div>

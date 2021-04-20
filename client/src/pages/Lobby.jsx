@@ -72,10 +72,8 @@ export default function Lobby() {
           <h1 className="mt-4" style={{color: "#FFEF00"}}>Outspoken Room</h1>
           <div className="row justify-content-center">
             {
-              rooms.length === 0 ?
-              <div>
-                <h2>Masih kosong</h2>
-              </div>
+              rooms?.length === 0 ?
+              <></>
               :
               rooms?.map((room, i) => {
                 return <LobbyCard room={room} key={i} idx={i}/>
