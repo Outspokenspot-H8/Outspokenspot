@@ -12,10 +12,10 @@ export default function Navbar() {
         <img src={LogoNavbar} alt="outspokenspot logo" />
       </div>
       <nav id="nav">
-        <ul class="pt-3">
+        <ul className="pt-3">
           {
             pathname !== '/login' && pathname !== '/register' && pathname !== '/' ?
-            <li><button type="button" class="btn btn-outline-warning mx-2"><a href="/lobby" style={{textDecoration: "none", color: "inherit"}}>Exit</a></button></li>
+            <li><button type="button" className="btn btn-outline-warning mx-2"><a href="/lobby" style={{textDecoration: "none", color: "inherit"}}>Exit</a></button></li>
             :
             <></>
           }

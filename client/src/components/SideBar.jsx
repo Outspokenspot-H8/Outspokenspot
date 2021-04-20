@@ -71,7 +71,7 @@ export default function SideBar() {
         </div>
         <nav id="nav">
           <ul style={{marginRight: "0px"}}>
-            <li><button type="button" class="btn btn-outline-warning btn-lg" onClick={createRoom}>Create Room</button></li>
+            <li><button type="button" className="btn btn-outline-warning btn-lg" onClick={createRoom}>Create Room</button></li>
           </ul>
         </nav>
     </div>

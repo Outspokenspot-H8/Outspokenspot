@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import Avatar from '../assets/avatar.png'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { socket } from '../connections/socketio'
 import Swal from 'sweetalert2'
 
@@ -21,7 +20,7 @@ export default function LobbyCard({room, idx}) {
 
   useEffect(() => {
     setAva(`https://avatars.dicebear.com/api/bottts/${room.admin}.svg`)
-  }, [])
+  }, [room.admin])
 
   const handleJoin = (e) => {
     let payload = {
@@ -66,7 +65,7 @@ export default function LobbyCard({room, idx}) {
     <div className={`d-flex flex-row m-3 card lobbyCard-${lobbyCount}`} style={{width: "20rem", height: "15rem"}}>
       <div className="flex-fill d-flex flex-column align-items-center justify-content-center" id="content">
         <span>ADMIN</span>
-        <img className="my-2 p-2 border rounded-3" src={ava} alt="Card image cap" style={{width: "100px"}} />
+        <img className="my-2 p-2 border rounded-3" src={ava} alt="admin avatar" style={{width: "100px"}} />
         <span>{room.admin}</span>
         <button onClick={() => handleJoin()} className="btn btn-outline-warning my-2">Join</button>
       </div>

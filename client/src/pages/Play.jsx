@@ -337,7 +337,7 @@ export default function Play() {
                 {
                   isShufflingCard ?
                   <div>
-                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={()=> shuffleCard()} class="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={()=> shuffleCard()} className="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
                   </div>
                   :
                   <></>
@@ -345,7 +345,7 @@ export default function Play() {
                 {
                   randomTurnButton && !playerTurn.username ?
                   <div className="d-flex justify-content-center">
-                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} className="btn btn-secondary my-1 mx-2">Turn</button>
                   </div>
                   :
                   <></> 
@@ -353,7 +353,7 @@ export default function Play() {
                 {
                   randomTurnButton && localStorage.username === playerTurn.username && shuffleDone ?
                   <div className="d-flex justify-content-center">
-                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} className="btn btn-secondary my-1 mx-2">Turn</button>
                   </div>
                   :
                   !isShufflingCard && shuffleDone ? 
@@ -370,7 +370,7 @@ export default function Play() {
             }
           </div>
         </div>
-        <button className="open-button" style={isForm == "open" ? {display: "none"}: {display: "inline-block"}} onClick={openChat}>Chat</button>
+        <button className="open-button" style={isForm === "open" ? {display: "none"}: {display: "inline-block"}} onClick={openChat}>Chat</button>
 
         <div className={isForm === "open" ? "chat-popup" : "chat-popup close"} id="myForm">
           <form className="form-container" onSubmit={(e) => e.preventDefault()}>
