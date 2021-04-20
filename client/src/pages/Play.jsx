@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import BlankCard from '../assets/blank-cards-3.png'
+import PressStart from '../assets/press-start.gif'
 import { useParams } from 'react-router-dom'
 import { socket } from '../connections/socketio'
 import PlayerCard from '../components/PlayerCard'
@@ -8,6 +9,8 @@ import styled from 'styled-components'
 import axios from 'axios'
 import notif from '../assets/notif2.webp'
 import _ from 'lodash'
+import Swal from 'sweetalert2'
+import done from '../assets/done.webp'
 
 const StyledVideo = styled.video`
   height: auto;
@@ -43,22 +46,26 @@ export default function Play() {
   const socketRef = useRef()
   const userVideo = useRef()
   const peersRef = useRef([])
-  const [questions, setQuestions] = useState([])
+  const [questions, setQuestions] = useState(null)
   const [question, setQuestion] = useState({})
   const [isStart, setIsStart] = useState(false)
   // const [initiatePlayers, setInitiatePlayers] = useState([])
   const initiatePlayersRef = useRef([])
+  const initiateAdmin = useRef([])
   const [playerRemaining, setPlayerRemaining] = useState([])
   const [playerTurn, setPlayerTurn] = useState({})
   const [isShufflingCard, setIsShufflingCard] = useState(true)
   const [randomTurnButton, setRandomTurnButton] = useState(false)
   const [isRandomTurnPlayer, setIsRandomTurnPlayer] = useState(false)
+  const [shuffleDone, setShuffleDone] = useState(false)
   const { name } = useParams()
   const [isForm, setIsForm] = useState("close")
   const [message, setMessage] = useState("")
   const [messages, setMessages] = useState([])
   const [isNotif, setIsNotif] = useState(false)
-  const [cards, setCards] = useState([1,2,3,4,5,6,7,8])
+  const [turnFlipCard, setTurnFlipCard] = useState('')
+  const player = useRef('')
+  const questionLength = useRef([])
 
   useEffect(() => {
     if(messages.length !== 0){
@@ -69,11 +76,10 @@ export default function Play() {
   useEffect(() => {
     socket.emit('get-room-detail', name)
     socket.on('got-room-detail', (roomDetail) => {
-      console.log(roomDetail);
-      console.log(roomDetail.users, 'Ini room detail users');
       setRoom(roomDetail)
       setPlayerRemaining(roomDetail.users)
       initiatePlayersRef.current = roomDetail.users
+      initiateAdmin.current = roomDetail.admin
     })
     socketRef.current = socket
     navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true})
@@ -137,23 +143,39 @@ export default function Play() {
       // Start game, bawa questions
       socket.on('get-random-questions', (questions) => {
         setQuestions(questions)
+        console.log(isStart, "sebelum di start");
         setIsStart(true)
+        Swal.fire({
+          icon: 'question',
+          title: 'Rules',
+          html: '<pre style="font-family: Chakra Petch, sans-serif; color: #8E44AD; text-align: justify; word-wrap: break-word">' + 
+          '1. Gunakan tombol <span style="font-weigth: bold">Shuffle Card</span> untuk mengacak pertanyaan.\n2. Tombol Turn untuk mendapatkan giliran menjawab.\n3. Jawab dengan jujur setiap pertanyaan dan dapatkan percakapan mendalam dengan teman-temanmu.'
+          + '</pre>',
+          customClass: 'stepSwalCustom'
+        })
+        questionLength.current = questions;
+        const admin = initiatePlayersRef.current.filter(user => user.username === initiateAdmin.current )
+        initiateAdmin.current = admin[0];
+        setTurnFlipCard(admin[0])
       })
 
       socket.on('get-random-player', (payload) => {
         if (payload.players.length === 0) {
+          setTurnFlipCard(player.current)
           setPlayerRemaining(initiatePlayersRef.current)
           setPlayerTurn({})
-          setIsShufflingCard(true)
-          setQuestion({question: 'Shuffle next question'})
+          setQuestion({question: 'Shuffle Next Question'})
           setRandomTurnButton(false)
           setIsRandomTurnPlayer(false)
+          setShuffleDone(false)
         } else {
           setIsRandomTurnPlayer(true)
           if (payload.players.length === 1) {
+            player.current = payload.players[0];
             setPlayerTurn(payload.player)
             let result = []
             setPlayerRemaining(result)
+            shufflePlayerAnimation(payload.player, payload.players)
           } else {
             shufflePlayerAnimation(payload.player, payload.players)
             let result = [...payload.players.slice(0, payload.index), ...payload.players.slice(payload.index + 1)]
@@ -170,9 +192,6 @@ export default function Play() {
         swap(payload)
       })
   }, [])
-
-  useEffect(() => {
-  }, [cards])
 
   const createPeer = (userToSignal, callerID, stream) => {
     const peer = new Peer({
@@ -214,6 +233,10 @@ export default function Play() {
     })
     .then(({data})=>{
       const filterAndRandomData = _.sampleSize(data, 3);
+      const cover = {
+        question: "Your Admin must click the Question Card to Initiate The Game"
+      };
+      filterAndRandomData.push(cover);
       socket.emit('start-gameplay', {name, questions: filterAndRandomData})
     })
     .catch(err => {
@@ -245,16 +268,19 @@ export default function Play() {
   // }
 
   const shufflePlayerAnimation = (player, players) => {
+    setShuffleDone(false)
     const mulai = new Date().getTime();
-
+    
     setInterval(function () {
       if (new Date().getTime() - mulai > 2000) {
         return;
       }
       setPlayerTurn(players[Math.round(Math.random() * (players.length - 1))])
     }, 100);
+    console.log("SHUFFLE PLAYER")
     setTimeout(function () {
       setPlayerTurn(player)
+      setShuffleDone(true)
     }, 2000)
   }
 
@@ -262,11 +288,7 @@ export default function Play() {
     let randomPlayer = playerRemaining[Math.floor(Math.random() * playerRemaining.length)]
     let index = playerRemaining.indexOf(randomPlayer)
 
-    if (playerRemaining.length > 1) {
-      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
-    } else {
-      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
-    }
+    socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
   }
 
   const openChat = () => {
@@ -293,11 +315,19 @@ export default function Play() {
   }
 
   const swap = (questionRemaining) => {
+    if(questionRemaining.length === questionLength.current.length){
+      setPlayerTurn(initiateAdmin.current)
+    }
+    setRandomTurnButton(true)
+    setTurnFlipCard('')
+    if(questionRemaining.length === 1) {
+      setRandomTurnButton(false)
+      setShuffleDone(false)
+    }
     let questionCard = document.querySelector('.questionCard:last-child');
     questionCard.style.animation = "swap 700ms forwards";
     setTimeout(() => {
       questionCard.style.animation = "";
-      console.log(questionRemaining, "INI QUESTION SWAP")
       questionRemaining.pop()
       setQuestions([...questionRemaining])
     }, 700);
@@ -309,6 +339,7 @@ export default function Play() {
     socket.emit('swap', {name, questions})
   }
 
+  console.log(shuffleDone, randomTurnButton)
 
   return (
     <main>
@@ -338,14 +369,13 @@ export default function Play() {
 
         <div id="div-card" style={{zIndex: "5"}}>
           {
-            questions.length === 0 ?
+            !questions ?
             <div className="d-flex text-center justify-content-center align-items-center">
-              <h1 id="question-text">Click Shuffle Card To Play</h1>
-              <img src={BlankCard} style={{width: "250px", height: "350px"}} alt="outspoketspot-cards"/>
+              <img src={PressStart} className="my-5" style={{width: "250px"}} alt="outspoketspot-cards" />
             </div>
-            :
-            <div class="questionStack">
-              <div class={isRandomTurnPlayer? "stack disabled" : "stack"} onClick={(e) => getSwap(e)}>
+            : questions.length !== 0 ?
+            <div class={localStorage.username !== turnFlipCard.username ? "questionStack disabled" : "questionStack"}>
+              <div class={localStorage.username !== turnFlipCard.username ? "stack disabled" : "stack"} onClick={(e) => getSwap(e)}>
                 {
                   questions.map(question => {
                     return <div class="questionCard"><h1 id="questionStack">{question.question}</h1></div>
@@ -353,11 +383,15 @@ export default function Play() {
                 }
               </div>
             </div>
+            : 
+            <div className="d-flex text-center justify-content-center align-items-center">
+              <img src={done} className="my-5" style={{width: "250px"}} alt="outspoketspot-cards" />
+            </div>
           }
          
           {
-            isRandomTurnPlayer && !isShufflingCard ?
-            <h2>{playerTurn?.username}</h2>
+            isRandomTurnPlayer ?
+            <h2 style={{color: "#FFEF00"}}>{playerTurn?.username}</h2>
             :
             <></>
           }
@@ -365,21 +399,22 @@ export default function Play() {
             {
               isStart ?
               <div>
-                {/* {
-                  isShufflingCard ?
-                  <button onClick={()=> shuffleCard()} className="btn btn-secondary my-1 mx-2">Shuffle Card</button> 
-                  :
-                  <></>
-                } */}
                 {
-                  randomTurnButton ?
-                  <button onClick={() => shuffleUserTurn()} className="btn btn-secondary my-1 mx-2">Turn</button>
+                  randomTurnButton && localStorage.username === playerTurn.username ?
+                  <div className="d-flex justify-content-center">
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} class="btn btn-secondary my-1 mx-2">Turn</button>
+                  </div>
+                  :
+                   shuffleDone ? 
+                  <div className="d-flex justify-content-center">
+                    <p style={{color: "#FFEF00"}}>Waiting player to click Turn button...</p>
+                  </div>
                   :
                   <></>
                 }
               </div>
               :
-              <button className="btn btn-secondary my-1 mx-2"
+              <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} class="btn btn-secondary my-1 mx-2"
               onClick={()=> getCard()}>Start Game</button>
             }
           </div>

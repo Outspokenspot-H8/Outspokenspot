@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 
 export default function LobbyCard({room, idx}) {
   const history = useHistory()
+
   const [lobbyCount, setLobbyCount] = useState(null)
 
   useEffect(() => {
@@ -15,6 +16,12 @@ export default function LobbyCard({room, idx}) {
       setLobbyCount(0)
     }
   }, [room])
+  
+  const [ava, setAva] = useState('')
+
+  useEffect(() => {
+    setAva(`https://avatars.dicebear.com/api/bottts/${room.admin}.svg`)
+  }, [])
 
   const handleJoin = (e) => {
     let payload = {
@@ -27,7 +34,7 @@ export default function LobbyCard({room, idx}) {
       }
     }
 
-    if (room.users.length < 4 ) {
+    if (room.users.length < room.max ) {
       socket.emit('join-room', payload)
       history.push(`/room/${room.name}`)
 
@@ -37,9 +44,10 @@ export default function LobbyCard({room, idx}) {
         icon: 'error',
         title: 'Oops...',
         text: 'Room sudah penuh!',
+        customClass: 'stepSwalCustom'
       })
-      history.push('/lobby') 
-    }  
+      history.push('/lobby')
+    }
   }
 
   const userLobby = () => {
@@ -58,7 +66,7 @@ export default function LobbyCard({room, idx}) {
     <div className={`d-flex flex-row m-3 card lobbyCard-${lobbyCount}`} style={{width: "20rem", height: "15rem"}}>
       <div className="flex-fill d-flex flex-column align-items-center justify-content-center" id="content">
         <span>ADMIN</span>
-        <img className="my-2" src={Avatar} alt="Card image cap" />
+        <img className="my-2 p-2 border rounded-3" src={ava} alt="Card image cap" style={{width: "100px"}} />
         <span>{room.admin}</span>
         <button onClick={() => handleJoin()} className="btn btn-outline-warning my-2">Join</button>
       </div>
