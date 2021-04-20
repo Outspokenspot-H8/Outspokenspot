@@ -73,16 +73,7 @@ export default function Lobby() {
           <div className="row justify-content-center">
             {
               rooms?.length === 0 ?
-              <div className="text-center">
-
-                <img 
-                  src="https://c.tenor.com/BxhPC0sF28sAAAAj/calamardo-squidward.gif" 
-                  alt="this slowpoke moves"
-                  
-                  style={{width:"330px"}}/>
-                <h1 className="mt-4" style={{color: "#FFEF00"}}>Belum buat Room</h1>
-
-              </div>
+              <></>
               :
               rooms?.map((room, i) => {
                 return <LobbyCard room={room} key={i} idx={i}/>
