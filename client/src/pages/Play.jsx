@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
 import BlankCard from '../assets/blank-cards-3.png'
-import BlankCardBack from '../assets/blank-cards-outspokenspot-2.png'
 import PressStart from '../assets/press-start.gif'
 import { useParams } from 'react-router-dom'
 import { socket } from '../connections/socketio'
@@ -8,6 +7,7 @@ import PlayerCard from '../components/PlayerCard'
 import Peer from 'simple-peer'
 import styled from 'styled-components'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 const StyledVideo = styled.video`
   height: auto;
@@ -134,6 +134,14 @@ export default function Play() {
         console.log(isStart, "sebelum di start");
         setIsStart(true)
         console.log(isStart, "setelah di start");
+        Swal.fire({
+          icon: 'question',
+          title: 'Rules',
+          html: '<pre style="font-family: Chakra Petch, sans-serif; color: #8E44AD; text-align: justify; word-wrap: break-word">' + 
+          '1. Gunakan tombol <span style="font-weigth: bold">Shuffle Card</span> untuk mengacak pertanyaan.\n2. Tombol Turn untuk mendapatkan giliran menjawab.\n3. Jawab dengan jujur setiap pertanyaan dan dapatkan percakapan mendalam dengan teman-temanmu.'
+          + '</pre>',
+          customClass: 'stepSwalCustom'
+        })
       })
 
       socket.on('get-random-player', (payload) => {
@@ -350,7 +358,7 @@ export default function Play() {
                   :
                   !isShufflingCard && shuffleDone ? 
                   <div className="d-flex justify-content-center">
-                    <p>Waiting player to click Turn button...</p>
+                    <p style={{color: "#FFEF00"}}>Waiting player to click Turn button...</p>
                   </div>
                   :
                   <></>

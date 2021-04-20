@@ -44,6 +44,7 @@ export default function LobbyCard({room, idx}) {
         icon: 'error',
         title: 'Oops...',
         text: 'Room sudah penuh!',
+        customClass: 'stepSwalCustom'
       })
       history.push('/lobby')
     }

@@ -537,3 +537,29 @@ div.footer-content img {
       transform: translateX(0%);
   }
 }
+
+.stepSwalCustom > div > ul > li {
+  background-color: #8E44AD!important;
+  color: #FFEF00!important;
+}
+
+.stepSwalCustom > div > h2 {
+  color: #8E44AD!important;
+}
+
+.stepSwalCustom > div > .swal2-html-container {
+  color: #8E44AD!important;
+}
+
+.stepSwalCustom > div > .swal2-confirm {
+  color: #FFEF00!important;
+  background-color: #8E44AD;
+}
+
+.stepSwalCustom > div > .swal2-cancel {
+  background-color: #dc3545;
+}
+
+.stepSwalCustom > div > select {
+  color: #8E44AD!important;
+}

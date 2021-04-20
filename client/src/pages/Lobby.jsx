@@ -42,7 +42,7 @@ export default function Lobby() {
     })
   }, [rooms])
 
-  if (rooms.length === 0){
+  if (rooms?.length === 0){
     return (
       <div>
       <SideBar />

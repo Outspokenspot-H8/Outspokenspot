@@ -42,6 +42,7 @@ export default function LoginRegister() {
           icon: 'error',
           title: 'Oops...',
           text: err.response.data.message,
+          customClass: 'stepSwalCustom'
         })
       })
   }
@@ -85,7 +86,8 @@ export default function LoginRegister() {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        html: '<pre style="font-family: Chakra Petch, sans-serif; color: #595a5e">' + str + '</pre>',
+        html: '<pre style="font-family: Chakra Petch, sans-serif; color: #8E44AD">' + str + '</pre>',
+        customClass: 'stepSwalCustom'
       })
     })
   }

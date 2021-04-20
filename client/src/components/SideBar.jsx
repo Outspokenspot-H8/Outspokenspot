@@ -10,7 +10,8 @@ export default function SideBar() {
       input: 'text',
       confirmButtonText: 'Next &rarr;',
       showCancelButton: true,
-      progressSteps: ['1', '2', '3']
+      progressSteps: ['1', '2', '3'],
+      customClass: 'stepSwalCustom'
     }).queue([
       {
         title: 'Room Name',
@@ -36,14 +37,16 @@ export default function SideBar() {
               icon: 'success',
               title: 'Success Create Room!',
               text: `You are an admin in ${result.value[0]} Room`,
-              confirmButtonText: 'Done'
+              confirmButtonText: 'Done',
+              customClass: 'stepSwalCustom'
             })
           } else {
             Swal.fire({
               icon: 'error',
               title: 'Failed Create Room!',
               text: `Room has been exist!`,
-              confirmButtonText: 'Done'
+              confirmButtonText: 'Done',
+              customClass: 'stepSwalCustom'
             })
           }
         })
