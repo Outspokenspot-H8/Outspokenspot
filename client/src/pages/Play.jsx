@@ -251,11 +251,6 @@ export default function Play() {
     let index = playerRemaining.indexOf(randomPlayer)
 
     socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
-    // if (playerRemaining.length > 1) {
-    // } else {
-    //   console.log(playerRemaining, 'INI LENGTH < 1');
-    //   socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
-    // }
   }
 
   const openChat = () => {

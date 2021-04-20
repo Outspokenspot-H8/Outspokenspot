@@ -62,6 +62,7 @@ describe('Suite of sockets tests', () => {
               name: 'Test Room',
               max: 4,
               users: [],
+              chats: [],
               admin: 'outspoken',
               isStarted: false,
             }
@@ -99,6 +100,7 @@ describe('Suite of sockets tests', () => {
               name: 'Test Room',
               max: 4,
               users: [],
+              chats: [],
               admin: 'outspoken',
               isStarted: false,
             }
@@ -244,6 +246,22 @@ describe('Suite of sockets tests', () => {
       socket.emit('start-gameplay', payload)
 
       socket.on('get-random-questions', res => {
+        console.log(res);
+      })
+      done()
+      
+    })
+
+    it('send-message', (done) => {
+      let payload = {
+        name: 'Test Room',
+        player: 'outspoken',
+        message: 'Hello!'
+      }
+
+      socket.emit('send-message', payload)
+
+      socket.on('fetch-all-message', res => {
         console.log(res);
       })
       done()
