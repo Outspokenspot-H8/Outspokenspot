@@ -136,6 +136,7 @@ export default function Play() {
           setQuestion({question: 'Shuffle Next Question'})
           setRandomTurnButton(false)
           setIsRandomTurnPlayer(false)
+          setPlayerTurn({})
         } else {
           setIsRandomTurnPlayer(true)
           if (payload.players.length === 1) {
