@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom'
 import axios from 'axios'
 import { socket } from '../connections/socketio'
 import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 
 export default function LoginRegister() {
   const [slide, setSlide] = useState('login')
@@ -78,18 +77,16 @@ export default function LoginRegister() {
       
       Toast.fire({
         icon: 'success',
-        title: 'Signed in successfully'
+        title: 'Register success!'
       })
       handleSlideLogIn()
     })
     .catch(error => {
-      error.response.data.errors.map(err => {
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: (err),
-        })
+      let str = error.response.data.errors.join('\n')
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        html: '<pre style="font-family: Chakra Petch, sans-serif; color: #595a5e">' + str + '</pre>',
       })
     })
   }
@@ -117,7 +114,6 @@ export default function LoginRegister() {
         <h4>This is not a game, more like an intimate session with your friend, family, or your partner. Be honest, be outspoken.</h4>
       </div>
       <div className="form-structor">
-
           <div className={ slide === 'signup' ? "signup slide-up" : "signup" }>
               <h2 onClick={() => handleSlideSignUp()} className="form-title" id="signup"><span>or</span>Sign up</h2>
               <div className="form-holder">
