@@ -11,7 +11,7 @@
     "db:migrate:development": "sequelize db:migrate --env development",
     "db:seed:all:development": "sequelize db:seed:all --env development",
     "test": "NODE_ENV=test npx jest --detectOpenHandles --forceExit --runInBand --coverage",
-    "dev": "set NODE_ENV=development&& nodemon ./bin/https.js"
+    "dev": "NODE_ENV=development nodemon ./bin/https.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "pg": "^8.6.0",
     "sequelize": "^6.6.2",
     "socket.io": "^4.0.1",

@@ -47,7 +47,7 @@ header {
 }
 
 .logo img{
-  height: 150px;
+  height: 200px;
   width: auto;
   cursor: pointer;
 }
@@ -114,6 +114,14 @@ ul {
     align-items: center;
     justify-content: center;
     flex-flow: column wrap;
+}
+
+#loading-image {
+  background: url('../assets/dance.gif');
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  background-size: 100% 100%;
+  box-shadow: 0 0 8px 8px #8E44AD inset;
 }
 
 .banner-lobby {
@@ -185,6 +193,62 @@ div.banner-content img {
     display: block;
 }
 
+.card-1 {
+  animation: slideToTopLeft 2s ease forwards;
+}
+@keyframes slideToTopLeft{
+  0%{
+      opacity: 0;
+      transform: translate3d(30%, 30%, 0);
+  }
+  100%{
+      opacity: 1;
+      transform: translateY(0%);
+  }
+}
+
+.card-2 {
+  animation: slideToBottomLeft 2s ease forwards;
+}
+@keyframes slideToBottomLeft{
+  0%{
+    opacity: 0;
+    transform: translate3d(30%, -30%, 0);
+  }
+  100%{
+    opacity: 1;
+      transform: translateY(0%);
+  }
+}
+
+.card-3 {
+  animation: slideToTopRight 2s ease forwards;
+}
+@keyframes slideToTopRight{
+  0%{ 
+    opacity: 0;
+      transform: translate3d(-30%, 30%, 0);
+  }
+  100%{
+    opacity: 1;
+      transform: translateY(0%);
+  }
+}
+
+.card-4 {
+  animation: slideToBottomRight 2s ease forwards;
+}
+@keyframes slideToBottomRight{
+  0%{
+    opacity: 0;
+      transform: translate3d(-30%, -30%, 0);
+  }
+  100%{
+    opacity: 1;
+      transform: translateY(0%);
+  }
+}
+
 #div-card {
   position: absolute;
   display: flex;
@@ -194,6 +258,11 @@ div.banner-content img {
   flex-direction: column;
   top: 10%;
   left: 41%;
+  animation: fadeIn 3s ease forwards;
+}
+
+#border-active {
+  box-shadow: 1rem 1rem 1rem 0 rgba(213, 0, 0, 0.3);
 }
 
 div.banner-content p {
@@ -325,3 +394,146 @@ div.footer-content img {
 .cf {
     *zoom: 1;
 } */
+
+
+/* Button used to open the chat form - fixed at the bottom of the page */
+.open-button {
+  background-color: #555;
+  color: white;
+  padding: 10px 5px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  position: absolute;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  bottom: 23px;
+  width: 200px;
+}
+
+/* The popup chat - hidden by default */
+.chat-popup {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  width: 400px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.chat-popup.close {
+  display: none;
+}
+@keyframes fadeIn{
+  0%{
+      opacity: 0;
+  }
+  100%{
+      opacity: 1;
+  }
+}
+
+
+/* Add styles to the form container */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  padding: 10px;
+  background-color: white;
+}
+
+/* Full-width textarea */
+.form-container input {
+  width: 100%;
+  padding: 5px;
+  margin-top: 2px;
+  border: none;
+  background: #f1f1f1;
+  resize: none;
+}
+
+/* When the textarea gets focus, do something */
+.form-container textarea:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+.box-body {
+  margin-bottom: 10px;
+  background-color: grey;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+}
+
+#minimize {
+  padding : 1px 10px!important;
+  margin-bottom: 5px;
+}
+
+#messagePlayer {
+  animation: slidetoRight .5s ease forwards;
+}
+@keyframes slidetoRight{
+  0%{
+      transform: translateX(-100%);
+  }
+  100%{
+      transform: translateX(0%);
+  }
+}
+
+#messageOther {
+  animation: slidetoLeft .5s ease forwards;
+}
+@keyframes slidetoLeft{
+  0%{
+      transform: translateX(100%);
+  }
+  100%{
+      transform: translateX(0%);
+  }
+}
+
+.lobbyCard-0 {
+  animation: slidetoRightWithOpacity .5s ease forwards;
+}
+
+.lobbyCard-1 {
+  animation: slidetoLeftWithOpacity .5s ease forwards;
+}
+
+@keyframes slidetoRightWithOpacity{
+  0%{
+    opacity: 0;
+      transform: translateX(-100%);
+  }
+  100%{
+    opacity: 1;
+      transform: translateX(0%);
+  }
+}
+
+@keyframes slidetoLeftWithOpacity{
+  0%{
+    opacity: 0;
+      transform: translateX(100%);
+  }
+  100%{
+    opacity: 1;
+      transform: translateX(0%);
+  }
+}

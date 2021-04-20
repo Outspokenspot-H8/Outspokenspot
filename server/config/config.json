@@ -1,14 +1,14 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "Fajri112469",
+    "username": "rendra",
+    "password": "123456",
     "database": "db_outspoken",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
-    "username": "postgres",
-    "password": "root",
+    "username": "rendra",
+    "password": "123456",
     "database": "db_outspoken_test",
     "host": "127.0.0.1",
     "dialect": "postgres"

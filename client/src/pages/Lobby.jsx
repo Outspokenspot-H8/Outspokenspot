@@ -42,6 +42,25 @@ export default function Lobby() {
     })
   }, [rooms])
 
+  if (rooms.length === 0){
+    return (
+      <div>
+      <SideBar />
+        <main>
+          <div className="d-flex justify-content-end mx-4">
+            <a onClick={handleLogout} href="/" type="button" className="btn btn-danger mt-4" id="logout">LOG OUT</a>
+          </div>
+          <div className="banner-lobby" style={{height: "90vh"}}>
+            <h1 className="my-4" style={{color: "#FFEF00"}}>Outspoken Room</h1>
+            <div className="row justify-content-center" style={{height: "60vh", width: "60vh"}} id="loading-image">
+            </div>
+            <h3 className="my-4" style={{color: "#FFEF00"}}>Room is Unavailable</h3>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div>
       <SideBar />
@@ -66,11 +85,10 @@ export default function Lobby() {
               </div>
               :
               rooms?.map((room, i) => {
-                return <LobbyCard room={room} key={i}/>
+                return <LobbyCard room={room} key={i} idx={i}/>
               })
             }
           </div>
-          
         </div>
       </main>
     </div>

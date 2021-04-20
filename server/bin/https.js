@@ -3,6 +3,7 @@ const http = require('http')
 const port = process.env.PORT || 4000
 const socketio = require('socket.io')
 const server = http.createServer(app)
+const _ = require('lodash')
 
 const io = socketio(server, {
     cors: {
@@ -26,6 +27,7 @@ io.on('connection', (socket) => {
       max: payload.max,
       admin: payload.admin,
       isStarted: false,
+      chats: [],
     }
     const filtered = rooms.filter(roomExist => roomExist.name === room.name)
     if(filtered.length !== 0){
@@ -37,8 +39,13 @@ io.on('connection', (socket) => {
   })
 
   socket.on('fetch-room', () => {
-    const filtered = rooms.filter(room => room.isStarted === false)
-    socket.emit('fetched-room', filtered)
+    const filtered = _.remove(rooms, function(room) {
+      return (room.isStarted === true && room.users.length === 0)
+    })
+    const filter = rooms.filter(room => {
+      return room.isStarted === false
+    })
+    socket.emit('fetched-room', filter)
   })
   
   socket.on('join-room', (data) => {
@@ -80,6 +87,16 @@ io.on('connection', (socket) => {
     }
     
     socket.emit('other-users', otherUsers)
+  })
+
+  socket.on('send-message', ({name, player, message}) => {
+    let roomIndex = rooms.findIndex((room) => room.name === name )
+    let messagePlayer = {
+      player,
+      message
+    }
+    rooms[roomIndex].chats.push(messagePlayer)
+    io.sockets.in(name).emit('fetch-all-message', rooms[roomIndex].chats)
   })
 
   socket.on('sending-signal', (payload) => {
@@ -129,8 +146,10 @@ io.on('connection', (socket) => {
   })
 })
 
-server.listen(port, () => {
-    console.log(`Outspokenspotapp listening on port: ${port}`)
-})
+if (process.env.NODE_ENV !== "test") {
+  server.listen(port, () => {
+      console.log(`Outspokenspotapp listening on port: ${port}`)
+  })
+}
 
-// module.exports = server
+module.exports = io

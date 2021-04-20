@@ -4,8 +4,19 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { socket } from '../connections/socketio'
 import Swal from 'sweetalert2'
 
-export default function LobbyCard({room}) {
+export default function LobbyCard({room, idx}) {
   const history = useHistory()
+
+  const [lobbyCount, setLobbyCount] = useState(null)
+
+  useEffect(() => {
+    if(idx % 2 ===  1){
+      setLobbyCount(1)
+    } else {
+      setLobbyCount(0)
+    }
+  }, [room])
+  
   const [ava, setAva] = useState('')
 
   useEffect(() => {
@@ -51,10 +62,10 @@ export default function LobbyCard({room}) {
   }
 
   return (
-    <div className="d-flex flex-row m-3 card" style={{width: "20rem", height: "15rem"}}>
+    <div className={`d-flex flex-row m-3 card lobbyCard-${lobbyCount}`} style={{width: "20rem", height: "15rem"}}>
       <div className="flex-fill d-flex flex-column align-items-center justify-content-center" id="content">
         <span>ADMIN</span>
-        <img className="my-2" src={ava} alt="Card image cap" />
+        <img className="my-2 p-2 border rounded-3" src={ava} alt="Card image cap" style={{width: "100px"}} />
         <span>{room.admin}</span>
         <button onClick={() => handleJoin()} className="btn btn-outline-warning my-2">Join</button>
       </div>
