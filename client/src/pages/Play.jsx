@@ -142,6 +142,7 @@ export default function Play() {
             setPlayerTurn(payload.player)
             let result = []
             setPlayerRemaining(result)
+            shufflePlayerAnimation(payload.player, payload.players)
           } else {
             shufflePlayerAnimation(payload.player, payload.players)
             let result = [...payload.players.slice(0, payload.index), ...payload.players.slice(payload.index + 1)]
@@ -225,7 +226,7 @@ export default function Play() {
   const shufflePlayerAnimation = (player, players) => {
     setShuffleDone(false)
     const mulai = new Date().getTime();
-
+    
     setInterval(function () {
       if (new Date().getTime() - mulai > 2000) {
         return;
@@ -242,12 +243,12 @@ export default function Play() {
     let randomPlayer = playerRemaining[Math.floor(Math.random() * playerRemaining.length)]
     let index = playerRemaining.indexOf(randomPlayer)
 
-    if (playerRemaining.length > 1) {
-      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
-    } else {
-      console.log(playerRemaining, 'INI LENGTH < 1');
-      socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
-    }
+    socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
+    // if (playerRemaining.length > 1) {
+    // } else {
+    //   console.log(playerRemaining, 'INI LENGTH < 1');
+    //   socket.emit('shuffle-user-turn', {name, player: randomPlayer, players: playerRemaining, index})
+    // }
   }
 
   return (
