@@ -138,7 +138,7 @@ export default function Play() {
           icon: 'question',
           title: 'Rules',
           html: '<pre style="font-family: Chakra Petch, sans-serif; color: #8E44AD; text-align: justify; word-wrap: break-word">' + 
-          '1. Gunakan tombol <span style="font-weigth: bold">Shuffle Card</span> untuk mengacak pertanyaan.\n2. Tombol Turn untuk mendapatkan giliran menjawab.\n3. Jawab dengan jujur setiap pertanyaan dan dapatkan percakapan mendalam dengan teman-temanmu.'
+          '1. Gunakan tombol Shuffle Card untuk mengacak\n    pertanyaan.\n2. Tombol Turn untuk mendapatkan giliran menjawab.\n3. Jawab sejujur mungkin di setiap pertanyaan dan \n    dapatkan percakapan mendalam.'
           + '</pre>',
           customClass: 'stepSwalCustom'
         })
