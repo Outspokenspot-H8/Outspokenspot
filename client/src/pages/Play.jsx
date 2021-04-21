@@ -376,11 +376,11 @@ export default function Play() {
               <img src={PressStart} className="my-5" style={{width: "250px"}} alt="outspoketspot-cards" />
             </div>
             : questions.length !== 0 ?
-            <div class={localStorage.username !== turnFlipCard.username ? "questionStack disabled" : "questionStack"}>
-              <div class={localStorage.username !== turnFlipCard.username ? "stack disabled" : "stack"} onClick={(e) => getSwap(e)}>
+            <div className={localStorage.username !== turnFlipCard?.username ? "questionStack disabled" : "questionStack"}>
+              <div className={localStorage.username !== turnFlipCard?.username ? "stack disabled" : "stack"} onClick={(e) => getSwap(e)}>
                 {
                   questions.map(question => {
-                    return <div class="questionCard"><h1 id="questionStack">{question.question}</h1></div>
+                    return <div className="questionCard text-center"><h1 style={{color: "#8E44AD"}} id="questionStack">{question.question}</h1></div>
                   }) 
                 }
               </div>
@@ -420,12 +420,16 @@ export default function Play() {
                   <div className="d-flex justify-content-center">
                     <p style={{color: "#FFEF00"}}>Waiting player to click Turn button...</p>
                   </div>
+                  : !playerTurn.username && !randomTurnButton ?
+                    <div className="d-flex justify-content-center">
+                      <p style={{color: "#FFEF00"}}>Shuffle to Next Question</p>
+                    </div>
                   :
-                   <> </>
+                  <></>
                 }
               </div>
               :
-              <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} class="btn btn-secondary my-1 mx-2"
+              <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} className="btn btn-secondary my-1 mx-2"
               onClick={()=> getCard()}>Start Game</button>
             }
           </div>
