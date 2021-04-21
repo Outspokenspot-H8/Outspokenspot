@@ -132,7 +132,7 @@ export default function Play() {
           const peers = peersRef.current.filter(peer => peer.peerID !== payload.id);
           peersRef.current = peers
           setPeers(peers)
-          initiatePlayersRef.current = payload.leavedRoom.users
+          initiatePlayersRef.current = payload?.leavedRoom?.users
         })
       })
 
@@ -200,7 +200,21 @@ export default function Play() {
       initiator: true,
       trickle: false,
       stream,
+      config: {
+        iceServers: [
+          {
+            url:'stun:relay.backups.cz'
+          },
+          {
+            url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+            credential: 'webrtc',
+            username: 'webrtc'
+          }
+        ]
+      }
     });
+
+    console.log(peer, 'Ini peer di createPeer');
 
     peer.on("signal", signal => {
       socketRef.current.emit("sending-signal", { userToSignal, callerID, signal, name })
@@ -210,11 +224,25 @@ export default function Play() {
   }
 
   const addPeer = (incomingSignal, callerID, stream) => {
-    const peer = new Peer({
+      const peer = new Peer({
         initiator: false,
         trickle: false,
         stream,
+        config: {
+          iceServers: [
+            {
+              url:'stun:relay.backups.cz'
+            },
+            {
+              url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+              credential: 'webrtc',
+              username: 'webrtc'
+            }
+          ]
+        }
     })
+
+    console.log(peer, 'ini peer di addPeer');
 
     peer.on("signal", signal => {
         socketRef.current.emit("returning-signal", { signal, callerID })
@@ -341,7 +369,6 @@ export default function Play() {
     socket.emit('swap', {name, questions})
   }
 
-  console.log(shuffleDone, randomTurnButton)
 
   return (
     <main>
@@ -358,7 +385,7 @@ export default function Play() {
         </div>
           {
             peers?.map((peer, idx) => {
-              return <PlayerCard key={peer.peerID} peer={peer} turn={playerTurn.username} idx={idx}/>;
+              return <PlayerCard key={peer.peerID} peer={peer} turn={playerTurn.username} idx={idx+2}/>;
             })
           }
         {/* {

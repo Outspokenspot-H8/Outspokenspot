@@ -101,7 +101,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sending-signal', (payload) => {
-    io.to(payload.userToSignal).emit('user-joined', { signal: payload.signal, callerID: payload.callerID, otherUser: payload.otherUser });
+    io.to(payload.userToSignal).emit('user-joined', { signal: payload.signal, callerID: payload.callerID });
   })
 
   socket.on('returning-signal', (payload) => {
