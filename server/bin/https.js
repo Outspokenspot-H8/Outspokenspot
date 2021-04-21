@@ -28,6 +28,7 @@ io.on('connection', (socket) => {
       admin: payload.admin,
       isStarted: false,
       chats: [],
+      queQuantity: payload.queQuantity,
     }
     const filtered = rooms.filter(roomExist => roomExist.name === room.name)
     if(filtered.length !== 0){
@@ -117,6 +118,10 @@ io.on('connection', (socket) => {
 
   socket.on('start-gameplay', (payload) => {
     io.sockets.in(payload.name).emit('get-random-questions', payload.questions)
+  })
+
+  socket.on('swap', (payload) => {
+    io.sockets.in(payload.name).emit('swap-questions', payload.questions)
   })
   
   socket.on('disconnect', () => {
