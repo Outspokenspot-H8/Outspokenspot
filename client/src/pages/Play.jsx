@@ -69,7 +69,7 @@ export default function Play() {
       initiatePlayersRef.current = roomDetail.users
     })
     socketRef.current = socket
-    navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true})
+    navigator.mediaDevices.getUserMedia({video: true, audio: true})
       .then((stream) => {
         userVideo.current.srcObject = stream;
         socketRef.current.emit('join-play', {name, username: localStorage.username})
