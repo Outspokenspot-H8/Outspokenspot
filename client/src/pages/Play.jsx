@@ -84,7 +84,7 @@ export default function Play() {
       detail.current = roomDetail
     })
     socketRef.current = socket
-    navigator.mediaDevices.getUserMedia({video: videoConstraints, audio: true})
+    navigator.mediaDevices.getUserMedia({video: true, audio: true})
       .then((stream) => {
         userVideo.current.srcObject = stream;
         socketRef.current.emit('join-play', {name, username: localStorage.username})
@@ -151,7 +151,7 @@ export default function Play() {
           icon: 'question',
           title: 'Rules',
           html: '<pre style="font-family: Chakra Petch, sans-serif; color: #8E44AD; text-align: justify; word-wrap: break-word">' + 
-          '1. Gunakan tombol <span style="font-weigth: bold">Shuffle Card</span> untuk mengacak pertanyaan.\n2. Tombol Turn untuk mendapatkan giliran menjawab.\n3. Jawab dengan jujur setiap pertanyaan dan dapatkan percakapan mendalam dengan teman-temanmu.'
+          '1. Gunakan tombol Shuffle Card untuk mengacak\n    pertanyaan.\n2. Tombol Turn untuk mendapatkan giliran menjawab.\n3. Jawab sejujur mungkin di setiap pertanyaan dan \n    dapatkan percakapan mendalam.'
           + '</pre>',
           customClass: 'stepSwalCustom'
         })
@@ -228,7 +228,7 @@ export default function Play() {
   const getCard = () => {
     axios({
       method:'GET',
-      url:'http://localhost:4000/questions',
+      url:'https://outspokenspot-h8.herokuapp.com/questions',
       headers:{
         access_token: localStorage.getItem('access_token')
       }
@@ -412,7 +412,7 @@ export default function Play() {
                 {
                   randomTurnButton && localStorage.username === playerTurn.username && shuffleDone ?
                   <div className="d-flex justify-content-center">
-                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} class="btn btn-secondary btn-lg my-1 mx-2">Turn</button>
+                    <button style={{backgroundColor: "#FFEF00", color: "#8E44AD"}} onClick={() => shuffleUserTurn()} className="btn btn-secondary my-1 mx-2">Turn</button>
                   </div>
                   : questions.length === 0 ?
                     <> </>

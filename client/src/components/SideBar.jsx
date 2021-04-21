@@ -67,22 +67,18 @@ export default function SideBar() {
       </div>
       <div className="about-us">
         <div className="about-us-content">
-            <h3>Peraturan & Cara bermain:</h3>
+            <h3>Cara Bermain:</h3>
             <ol>
-                <li>Cari teman bermain, bisa sahabat, keluarga atau partner anda.</li>  
-                <li>Jika kamu tidak punya teman, kamu juga bisa bermain sendiri.</li>
-                <li>Buat Room baru dengan memasukan nama room dan tekan submit.</li>
-                <li>Pilih berapa banyak orang dalam satu room atau kamu juga bisa masuk ke dalam Room orang lain dengan menekan tombol 'join'.</li>
-                <li>Jika pemain sudah berkumpul, pembuat room dapat menekan tombol 'start' untuk memulai permainan.</li>
-                <li>Tekan tombol 'start game' untuk memulai permainan.</li>
-                <li>Tekan shuffle card untuk mengeluarkan random pertanyaan, dan turn untuk mendapatkan giliran menjawab.</li>
-                <li>Jawab dengan jujur setiap pertanyaan dan dapatkan percakapan mendalam dengan partnermu.</li>
+                <li>Cari teman bermain, bisa sahabat, keluarga, partner, bahkan dengan orang yang tidak anda kenal.</li>
+                <li>Buat Room baru dengan menekan tombol Create Room, masukan nama room dan jumlah pemain.</li>
+                <li>Kamu juga bisa masuk ke dalam Room player lain dengan menekan tombol 'Join'.</li>
+                <li>Jika pemain sudah berkumpul, pembuat room dapat menekan tombol 'Start' untuk memulai permainan.</li>
             </ol>
           </div>
         </div>
         <nav id="nav">
           <ul style={{marginRight: "0px"}}>
-            <li><button type="button" class="btn btn-outline-warning btn-lg" onClick={createRoom}>Create Room</button></li>
+            <li><button type="button" className="btn btn-outline-warning btn-lg" onClick={createRoom}>Create Room</button></li>
           </ul>
         </nav>
     </div>
