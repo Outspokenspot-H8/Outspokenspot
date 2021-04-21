@@ -88,15 +88,16 @@ export default function Play() {
       .then((stream) => {
         userVideo.current.srcObject = stream;
         socketRef.current.emit('join-play', {name, username: localStorage.username})
+        console.log(socket.id, "INI PLAY")
         socketRef.current.on('other-users', (otherUsers) => {
           const peers = []
           otherUsers?.forEach(otherUser => {
-            const peer = createPeer(otherUser.socketId, socketRef.current.id, stream)
-
+            const peer = createPeer(otherUser.socketId, socketRef.current.id, stream, otherUser)
             peersRef.current.push({
               peerID: otherUser.socketId,
               peer,
             })
+            console.log(peer, "ini create")
 
             peers.push({peerID: otherUser.socketId, peer, user: otherUser});
           })
@@ -105,18 +106,16 @@ export default function Play() {
 
         socketRef.current.on('user-joined', payload => {
           const peer = addPeer(payload.signal, payload.callerID, stream);
+          const peerObj = {
+            peerID: payload.callerID,
+            peer,
+            otherUser: payload.otherUser
+          }
           peersRef.current.push({
             peerID: payload.callerID,
-            peer
+            peer,
           })
-
-          // const peerObj = {
-          //   peer,
-          //   peerID: payload.callerID
-          // }
-
-          // // Ini bikin double
-          // setPeers(users => [...users, peerObj])
+          console.log(peerObj, "INI ADD")
         })
 
         socketRef.current.on('receiving-returned-signal', payload => {
@@ -195,15 +194,17 @@ export default function Play() {
       })
   }, [])
 
-  const createPeer = (userToSignal, callerID, stream) => {
+  const createPeer = (userToSignal, callerID, stream, otherUser) => {
     const peer = new Peer({
       initiator: true,
       trickle: false,
       stream,
     });
 
+    console.log(otherUser, "INI OTHERUSER")
+  
     peer.on("signal", signal => {
-      socketRef.current.emit("sending-signal", { userToSignal, callerID, signal, name })
+      socketRef.current.emit("sending-signal", { userToSignal, callerID, signal, name, otherUser })
     })
 
     return peer;
@@ -341,7 +342,6 @@ export default function Play() {
     socket.emit('swap', {name, questions})
   }
 
-  console.log(shuffleDone, randomTurnButton)
 
   return (
     <main>
@@ -358,7 +358,7 @@ export default function Play() {
         </div>
           {
             peers?.map((peer, idx) => {
-              return <PlayerCard key={peer.peerID} peer={peer} turn={playerTurn.username} idx={idx}/>;
+              return <PlayerCard key={peer.peerID} peer={peer} turn={playerTurn.username} idx={idx+2}/>;
             })
           }
         {/* {
@@ -448,10 +448,8 @@ export default function Play() {
                   if(message.player === localStorage.username){
                     return (
                       <div className="d-flex flex-row justify-content-end align-items-center" style={{width: "100%"}} id="messagePlayer">
-                        <div>
-                          <p className="m-0" style={{fontSize: "12px"}}>{message.player}</p>
-                        </div>
                         <div className="w-50 rounded my-1 mx-2 text-center p-1" style={{backgroundColor: "#FFEF00"}}>
+                          <p className="m-0" style={{fontSize: "10px", position: "absolute", top: "0"}}>{message.player}</p>
                           <span style={{maxWidth: "50%", wordWrap: "break-word", fontSize: "13px"}}>{message.message}</span>
                         </div>
                       </div>
@@ -460,10 +458,8 @@ export default function Play() {
                     return (
                       <div className="d-flex flex-row justify-content-start align-items-center" style={{width: "100%"}} id="messageOther">
                         <div className="w-50 rounded my-1 mx-2 text-center p-1" style={{backgroundColor: "#8E44AD"}}>
-                          <span style={{maxWidth: "50%", wordWrap: "break-word", fontSize: "13px"}}>{message.message}</span>
-                        </div>
-                        <div>
-                          <p className="m-0" style={{fontSize: "12px"}}>{message.player}</p>
+                          <p className="m-0" style={{fontSize: "10px", position: "absolute", top: "0", color: "white"}}>{message.player}</p>
+                          <span style={{maxWidth: "50%", wordWrap: "break-word", fontSize: "13px", color: "white"}}>{message.message}</span>
                         </div>
                       </div>
                     )

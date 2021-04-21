@@ -108,6 +108,27 @@ export default function LoginRegister() {
     setSlide('signup')
   }
 
+  const getLocation = () => {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      axios({
+        method: "GET",
+        url: `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=b4a255488e24445995a05896c17b6b1d`
+      })
+        .then(({data}) => {
+          document.getElementById("button-location").disabled = true;
+          document.getElementById("input-location").disabled = true;
+          const newLocation = data.results[0].components.city;
+          setNewUser({
+            ...newUser,
+            location : newLocation
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    });
+  }
+
   return (
     <div className="banner">
       <div className="banner-content text-center">
@@ -121,7 +142,8 @@ export default function LoginRegister() {
                   <input onChange={changeDataRegister} value={newUser.username} name="username" type="text" className="input" placeholder="Username" />
                   <input onChange={changeDataRegister} value={newUser.email} name="email" type="email" className="input" placeholder="Email" />
                   <input onChange={changeDataRegister} value={newUser.password} name="password" type="password" className="input" placeholder="Password" />
-                  <input onChange={changeDataRegister} value={newUser.location} name="location" type="location" className="input" placeholder="Location" />
+                  <input onChange={changeDataRegister} value={newUser.location} name="location" type="location" className="input" placeholder="Location" style={{backgroundColor:"white"}} id="input-location"/>
+                  <button className="btn btn-outline-secondary" id="button-location" style={{position: "absolute", right: "3%", bottom: "29%", width: "80px"}} onClick={getLocation}>SET</button>
               </div>
               <button onClick={() => register()} className="submit-btn">Submit</button>
           </div>
