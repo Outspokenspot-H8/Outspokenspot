@@ -8,7 +8,7 @@ export default function PlayerCard({peer, turn, idx}) {
         <Video peer={peer?.peer} ></Video>
       </div>
       <div className="flex-fill d-flex justify-content-around align-items-center flex-row text-center bg-light" style={{zIndex: "2"}}>
-        <h3>{peer.user.username}</h3>
+        <h3>{peer?.user?.username}</h3>
         <p style={{margin: '0px'}}>{peer?.user?.location}</p>
       </div>
     </div>
