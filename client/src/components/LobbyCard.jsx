@@ -32,7 +32,7 @@ export default function LobbyCard({room, idx}) {
         socketId: socket.id
       }
     }
-
+    console.log(socket.id, "INI JOIN")
     if (room.users.length < room.max ) {
       socket.emit('join-room', payload)
       history.push(`/room/${room.name}`)

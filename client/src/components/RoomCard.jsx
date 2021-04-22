@@ -8,7 +8,7 @@ export default function RoomCard({user}) {
   }, [user.username])
 
   return (
-    <div className="d-flex flex-row m-3 card" style={{width: "23vw"}}>
+    <div className="d-flex flex-row m-3 card" style={{width: "23vw"}} id="user">
       <div className="flex-fill d-flex flex-column align-items-center justify-content-center">
         <img className="my-3 rounded-3" src={ava} alt="player avatar" style={{width: "100px"}} />
       </div>

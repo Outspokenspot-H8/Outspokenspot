@@ -64,7 +64,6 @@ io.on('connection', (socket) => {
   socket.on('start-game', (data) => {
     let roomIndex = rooms.findIndex((room) => room.name === data)
     rooms[roomIndex].isStarted = true
-    // console.log(roomIndex)
     socket.broadcast.to(data).emit('started-game', data)
   })
 
@@ -86,6 +85,7 @@ io.on('connection', (socket) => {
       otherUsers = rooms[roomIndex].users.filter(user => user.username !== username )
       otherUsersSocketID = otherUsers.map(user => user.socketId)
     }
+
     
     socket.emit('other-users', otherUsers)
   })
@@ -101,7 +101,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sending-signal', (payload) => {
-    io.to(payload.userToSignal).emit('user-joined', { signal: payload.signal, callerID: payload.callerID });
+    io.to(payload.userToSignal).emit('user-joined', { signal: payload.signal, callerID: payload.callerID, otherUser: payload.otherUser });
   })
 
   socket.on('returning-signal', (payload) => {

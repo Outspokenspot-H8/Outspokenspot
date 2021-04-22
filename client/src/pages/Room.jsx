@@ -55,7 +55,7 @@ export default function Room() {
 
               {
                 room.admin === user ?
-                <div className="d-flex justify-content-center my-3">
+                <div className="d-flex justify-content-center my-2">
                   <button onClick={() => handleStartGame()} type="button" className="btn-lg btn-danger" id="logout">Start</button>
                 </div>
                 :
