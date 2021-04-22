@@ -92,7 +92,7 @@ export default function Play() {
         socketRef.current.on('other-users', (otherUsers) => {
           const peers = []
           otherUsers?.forEach(otherUser => {
-            const peer = createPeer(otherUser.socketId, socketRef.current.id, stream, otherUser)
+            const peer = createPeer(otherUser.socketId, socketRef.current.id, stream)
             peersRef.current.push({
               peerID: otherUser.socketId,
               peer,
@@ -131,7 +131,7 @@ export default function Play() {
           const peers = peersRef.current.filter(peer => peer.peerID !== payload.id);
           peersRef.current = peers
           setPeers(peers)
-          initiatePlayersRef.current = payload.leavedRoom.users
+          initiatePlayersRef.current = payload?.leavedRoom?.users
         })
       })
 
@@ -194,28 +194,53 @@ export default function Play() {
       })
   }, [])
 
-  const createPeer = (userToSignal, callerID, stream, otherUser) => {
+  const createPeer = (userToSignal, callerID, stream) => {
     const peer = new Peer({
       initiator: true,
       trickle: false,
       stream,
+      config: {
+        iceServers: [
+          {
+            url:'stun:relay.backups.cz'
+          },
+          {
+            url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+            credential: 'webrtc',
+            username: 'webrtc'
+          }
+        ]
+      }
     });
 
-    console.log(otherUser, "INI OTHERUSER")
-  
+    console.log(peer, 'Ini peer di createPeer')
     peer.on("signal", signal => {
-      socketRef.current.emit("sending-signal", { userToSignal, callerID, signal, name, otherUser })
+      socketRef.current.emit("sending-signal", { userToSignal, callerID, signal, name })
     })
 
     return peer;
   }
 
   const addPeer = (incomingSignal, callerID, stream) => {
-    const peer = new Peer({
+      const peer = new Peer({
         initiator: false,
         trickle: false,
         stream,
+        config: {
+          iceServers: [
+            {
+              url:'stun:relay.backups.cz'
+            },
+            {
+              url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+              credential: 'webrtc',
+              username: 'webrtc'
+            }
+          ]
+        }
     })
+
+    console.log(peer, 'ini peer di addPeer');
 
     peer.on("signal", signal => {
         socketRef.current.emit("returning-signal", { signal, callerID })
