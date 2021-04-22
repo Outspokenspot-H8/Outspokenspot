@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client'
 
-export const server = "http://localhost:4000"
+export const server = "https://outspokenspot-h8.herokuapp.com/"
 
 export const socket = io(server)
